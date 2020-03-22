@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version:1.0
  */
 @SpringBootApplication(scanBasePackages = "com.yingxue.lesson")
-@MapperScan(basePackages = "com.yingxue.lesson.mapper")
+@MapperScan("com.yingxue.lesson.mapper")
 public class WebApplication {
     public static void main(String[] args) {
         SpringApplication.run(WebApplication.class, args);
