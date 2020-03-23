@@ -20,4 +20,9 @@ public class Constant {
      * 订单编号
      */
     public final static String ORDER_CODE_KEY="order-code-key_";
+
+    /**
+     * 购物车key
+     */
+    public final static String CART_KEY="cart_";
 }

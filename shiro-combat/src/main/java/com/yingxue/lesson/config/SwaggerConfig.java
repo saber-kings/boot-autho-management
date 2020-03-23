@@ -1,5 +1,6 @@
 package com.yingxue.lesson.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,20 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Auther: luanzhaofei@outlook.com
+ * @Author: luanzhaofei@outlook.com
  * @Date: 2020/3/20
- * @Description: com.yingxue.lesson.config
+ * @Package: com.yingxue.lesson.config
  * @version: 0.0.1
  */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
+    @Value("${swagger2.enable}")
+    private boolean enable;
+
     @Bean
     public Docket crateDocket() {
         List<Parameter> parameterList = new ArrayList<>();
         ParameterBuilder parameterBuilder = new ParameterBuilder();
-        parameterBuilder.name("token").description("Swagger测试用(模拟token传入)非必填 header")
+        parameterBuilder.name("sessionId").description("Swagger测试用(模拟sessionId传入)非必填 header")
                 .modelRef(new ModelRef("String")).parameterType("header").required(false);
         parameterList.add(parameterBuilder.build());
         return new Docket(DocumentationType.SWAGGER_2)
@@ -42,13 +46,12 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(parameterList)
-                ;
+                .enable(enable);
     }
 
     private Tag[] getTags() {
         return new Tag[]{
-                new Tag("订单模块", "订单模块相关接口"),
-                new Tag("购物车模块", "购物车模块相关接口")
+//                new Tag("订单模块", "订单模块相关接口"),
         };
     }
 
