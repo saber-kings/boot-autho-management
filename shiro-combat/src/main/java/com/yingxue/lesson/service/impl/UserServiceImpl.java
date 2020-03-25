@@ -36,13 +36,13 @@ public class UserServiceImpl implements UserService {
     public LoginRespVO login(LoginReqVO vo) {
         SysUser sysUser = sysUserMapper.selectByUsername(vo.getUsername());
         if (sysUser==null) {
-            throw new BusinessException(4010004, "用户不存在，请注册！");
+            throw new BusinessException(4001004, "用户不存在，请注册！");
         }
         if (sysUser.getStatus()==2) {
-            throw new BusinessException(4010005, "用户已被禁用，请联系系统管理员！");
+            throw new BusinessException(4001005, "用户已被禁用，请联系系统管理员！");
         }
         if (!PasswordUtils.matches(sysUser.getSalt(), vo.getPassword(), sysUser.getPassword())) {
-            throw new BusinessException(4010006, "用户名密码不匹配，请重新登陆！");
+            throw new BusinessException(4001006, "用户名密码不匹配，请重新登陆！");
         }
         LoginRespVO respVO = new LoginRespVO();
         respVO.setUserId(sysUser.getId());
