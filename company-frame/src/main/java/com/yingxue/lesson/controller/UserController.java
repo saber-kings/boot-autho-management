@@ -1,17 +1,22 @@
 package com.yingxue.lesson.controller;
 
 import com.yingxue.lesson.constants.Constant;
+import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.service.UserService;
 import com.yingxue.lesson.utils.DataResult;
 import com.yingxue.lesson.vo.req.LoginReqVO;
+import com.yingxue.lesson.vo.req.UserPageReqVO;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
+import com.yingxue.lesson.vo.resp.PageReqVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * @Author: Saber污妖王
@@ -31,7 +36,7 @@ public class UserController {
 
     @PostMapping("/user/login")
     @ApiOperation(value = "用户登录接口")
-    public DataResult<LoginRespVO> login(@RequestBody LoginReqVO vo) {
+    public DataResult<LoginRespVO> login(@RequestBody @Valid LoginReqVO vo) {
         DataResult<LoginRespVO> result = DataResult.success();
         result.setData(userService.login(vo));
         return result;
@@ -50,6 +55,15 @@ public class UserController {
     @ApiOperation(value = "引导客户端去登录")
     public DataResult unLogin() {
         return DataResult.getResult(BaseResponseCode.TOKEN_ERROR);
+    }
+
+    @PostMapping("/users")
+    @ApiOperation(value = "分页查询用户接口")
+    @RequiresPermissions("sys:user:list")
+    public  DataResult<PageReqVO<SysUser>> pageInfo(@RequestBody UserPageReqVO vo){
+        DataResult<PageReqVO<SysUser>> result = DataResult.success();
+        result.setData(userService.pageInfo(vo));
+        return result;
     }
 
 }

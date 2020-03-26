@@ -29,7 +29,13 @@ public enum BaseResponseCode implements ResponseCodeInterface {
     ACCOUNT_ERROR(4000003, "该账号不存在"),
     ACCOUNT_LOCK(4010001, "该账号被锁定，请联系管理员"),
     ACCOUNT_PASSWORD_ERROR(4000004, "密码错误"),
-    TOKEN_ERROR(4010001, "用户未登录，请重新登陆");
+    TOKEN_ERROR(4010001, "用户未登录，请重新登录"),
+    TOKEN_NOT_NULL(4010001, "token 不能为空"),
+    SHIRO_AUTHENTICATION_EXCEPTION(4010001, "用户认证异常"),
+    ACCOUNT_HAS_DELETED_ERROR(4010001, "该账号已被删除，请联系系统管理员"),
+    TOKEN_PAST_DUE_INVALID(4010002, "token 异常，请刷新 token"),
+    NOT_PERMISSION(4030001, "没有权限访问该资源"),
+    ;
 
     /**
      * 响应码

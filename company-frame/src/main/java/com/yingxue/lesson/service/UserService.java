@@ -1,7 +1,10 @@
 package com.yingxue.lesson.service;
 
+import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.vo.req.LoginReqVO;
+import com.yingxue.lesson.vo.req.UserPageReqVO;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
+import com.yingxue.lesson.vo.resp.PageReqVO;
 
 /**
  * @Author: Saber污妖王
@@ -15,15 +18,22 @@ import com.yingxue.lesson.vo.resp.LoginRespVO;
 public interface UserService {
     /**
      * 登录接口
-     * @param vo
+     * @param vo 接收登陆请求数据的 vo
      * @return
      */
     LoginRespVO login(LoginReqVO vo);
 
     /**
      * 登出接口
-     * @param accessToken
-     * @param refreshToken
+     * @param accessToken 业务 token
+     * @param refreshToken 刷新 token
      */
     void logout(String accessToken,String refreshToken);
+
+    /**
+     * 用户数据分页的接口
+     * @param vo 用户分页数据的 vo
+     * @return 返回分页数据封装类
+     */
+    PageReqVO<SysUser> pageInfo(UserPageReqVO vo);
 }

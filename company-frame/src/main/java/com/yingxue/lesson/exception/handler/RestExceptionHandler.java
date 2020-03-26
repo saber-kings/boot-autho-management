@@ -4,6 +4,7 @@ import com.yingxue.lesson.exception.BusinessException;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.utils.DataResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -69,5 +70,11 @@ public class RestExceptionHandler {
             i++;
         }
         return DataResult.getResult(BaseResponseCode.METHOD_IDENTITY_ERROR.getCode(), msgs[0]);
+    }
+
+    @ExceptionHandler(value = UnauthorizedException.class)
+    public DataResult unauthorizedException(UnauthorizedException e){
+        log.error("UnauthorizedException,{}", e.getLocalizedMessage());
+         return DataResult.getResult(BaseResponseCode.NOT_PERMISSION);
     }
 }
