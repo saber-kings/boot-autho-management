@@ -8,7 +8,7 @@ import com.yingxue.lesson.utils.DataResult;
 import com.yingxue.lesson.vo.req.LoginReqVO;
 import com.yingxue.lesson.vo.req.UserPageReqVO;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
-import com.yingxue.lesson.vo.resp.PageReqVO;
+import com.yingxue.lesson.vo.resp.PageRespVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -28,8 +28,8 @@ import javax.validation.Valid;
  * @Version: 0.0.1
  */
 @RestController
-@Api(tags = "组织模块-用户管理")
 @RequestMapping("/api")
+@Api(tags = "组织模块-用户管理")
 public class UserController {
     @Resource
     private UserService userService;
@@ -60,8 +60,8 @@ public class UserController {
     @PostMapping("/users")
     @ApiOperation(value = "分页查询用户接口")
     @RequiresPermissions("sys:user:list")
-    public  DataResult<PageReqVO<SysUser>> pageInfo(@RequestBody UserPageReqVO vo){
-        DataResult<PageReqVO<SysUser>> result = DataResult.success();
+    public  DataResult<PageRespVO<SysUser>> pageInfo(@RequestBody UserPageReqVO vo){
+        DataResult<PageRespVO<SysUser>> result = DataResult.success();
         result.setData(userService.pageInfo(vo));
         return result;
     }

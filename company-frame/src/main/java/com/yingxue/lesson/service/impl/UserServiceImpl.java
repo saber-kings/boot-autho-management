@@ -14,7 +14,7 @@ import com.yingxue.lesson.utils.PasswordUtils;
 import com.yingxue.lesson.vo.req.LoginReqVO;
 import com.yingxue.lesson.vo.req.UserPageReqVO;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
-import com.yingxue.lesson.vo.resp.PageReqVO;
+import com.yingxue.lesson.vo.resp.PageRespVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageReqVO<SysUser> pageInfo(UserPageReqVO vo) {
+    public PageRespVO<SysUser> pageInfo(UserPageReqVO vo) {
         //Mapper接口方式的调用，推荐这种使用方式。
         PageHelper.startPage(vo.getPageNum(), vo.getPageSize());
         List<SysUser> sysUsers = sysUserMapper.selectAll(vo);

@@ -4,7 +4,7 @@ import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.vo.req.LoginReqVO;
 import com.yingxue.lesson.vo.req.UserPageReqVO;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
-import com.yingxue.lesson.vo.resp.PageReqVO;
+import com.yingxue.lesson.vo.resp.PageRespVO;
 
 /**
  * @Author: Saber污妖王
@@ -35,5 +35,5 @@ public interface UserService {
      * @param vo 用户分页数据的 vo
      * @return 返回分页数据封装类
      */
-    PageReqVO<SysUser> pageInfo(UserPageReqVO vo);
+    PageRespVO<SysUser> pageInfo(UserPageReqVO vo);
 }

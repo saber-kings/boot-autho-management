@@ -14,10 +14,10 @@ import lombok.Data;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "用户数据分页的数据封装类")
+@ApiModel(description = "接收前端提交的用户信息分页的数据")
 public class UserPageReqVO {
-    @ApiModelProperty(value = "当前第几页")
+    @ApiModelProperty("当前第几页")
     private Integer pageNum = 1;
-    @ApiModelProperty(value = "当前页数量")
+    @ApiModelProperty("当前页数量")
     private Integer pageSize = 10;
 }

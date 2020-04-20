@@ -72,6 +72,18 @@ spring:
     restart:
       poll-interval: 3s
       quiet-period: 2999ms
+  #thymeleaf
+  thymeleaf:
+    # 前缀 默认读取classpath:/templates/
+    #prefix: classpath:/templates/
+    # 后缀 默认.html
+    #suffix: .html
+    # 编码 默认 UTF-8
+    #encoding: UTF-8
+    # 默认 text/html
+    #servlet:
+      #content-type: text/html
+    cache: false
 
 #logging配置
 logging:

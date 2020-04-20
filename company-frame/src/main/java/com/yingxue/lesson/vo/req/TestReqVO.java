@@ -21,13 +21,13 @@ import java.util.List;
 @Data
 @ApiModel(description = "测试 Hibernate Validator 的数据封装类")
 public class TestReqVO {
-    @ApiModelProperty(value = "名称")
+    @ApiModelProperty("名称")
     @NotBlank(message = "名称不能为空")
     private String name;
     @NotNull(message = "age 不能为空")
-    @ApiModelProperty(value = "年龄")
+    @ApiModelProperty("年龄")
     private Integer age;
     @NotEmpty(message = "id 集合不能为空")
-    @ApiModelProperty(value = "id集合")
+    @ApiModelProperty("id集合")
     private List<String> ids;
 }

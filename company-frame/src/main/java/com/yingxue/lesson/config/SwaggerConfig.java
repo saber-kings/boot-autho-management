@@ -65,6 +65,10 @@ public class SwaggerConfig {
     private Tag[] getTags() {
         return new Tag[]{
                 new Tag("测试模块", "测试模块相关接口"),
+                new Tag("视图模块", "跳转视图相关接口"),
+                new Tag("首页模块", "首页模块相关接口"),
+                new Tag("组织管理-菜单权限管理", "菜单权限管理相关接口"),
+                new Tag("组织管理-角色管理", "角色管理相关接口"),
         };
     }
 

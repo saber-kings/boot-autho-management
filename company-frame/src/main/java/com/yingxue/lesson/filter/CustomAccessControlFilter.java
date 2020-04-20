@@ -6,6 +6,7 @@ import com.yingxue.lesson.exception.BusinessException;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.shiro.CustomUsernamePasswordToken;
 import com.yingxue.lesson.utils.DataResult;
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -96,7 +97,7 @@ public class CustomAccessControlFilter extends AccessControlFilter {
             response.setContentType(Constant.APPLICATION_JSON_UTF8);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             String userJson = JSON.toJSONString(result);
-            OutputStream out = response.getOutputStream();
+            @Cleanup OutputStream out = response.getOutputStream();
             out.write(userJson.getBytes(StandardCharsets.UTF_8));
             out.flush();
         } catch (IOException e) {

@@ -88,6 +88,12 @@ public class ShiroConfig {
         Map<String, String> map = new LinkedHashMap<>();
         //配置不会被拦截的链接 顺序判断
         map.put("/api/user/login", "anon");
+        map.put("/index/**", "anon");
+        map.put("/images/**", "anon");
+        map.put("/js/**", "anon");
+        map.put("/layui/**", "anon");
+        map.put("/css/**", "anon");
+        map.put("/treetable-lay/**", "anon");
         //放开swagger-ui地址
         map.put("/swagger/**", "anon");
         map.put("/v2/api-docs", "anon");

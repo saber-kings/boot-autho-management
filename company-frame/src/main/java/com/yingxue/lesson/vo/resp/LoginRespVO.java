@@ -16,14 +16,14 @@ import lombok.Data;
 @Data
 @ApiModel(description = "响应客户端登陆请求的数据")
 public class LoginRespVO {
-    @ApiModelProperty(value = "正常的业务token")
+    @ApiModelProperty("正常的业务token")
     private String accessToken;
-    @ApiModelProperty(value = "刷新token")
+    @ApiModelProperty("刷新token")
     private String refreshToken;
-    @ApiModelProperty(value = "用户名")
+    @ApiModelProperty("用户名")
     private String username;
-    @ApiModelProperty(value = "用户id")
+    @ApiModelProperty("用户id")
     private String id;
-    @ApiModelProperty(value = "电话")
+    @ApiModelProperty("电话")
     private String phone;
 }

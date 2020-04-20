@@ -1,7 +1,7 @@
 package com.yingxue.lesson.utils;
 
 import com.github.pagehelper.Page;
-import com.yingxue.lesson.vo.resp.PageReqVO;
+import com.yingxue.lesson.vo.resp.PageRespVO;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class PageUtil {
     private PageUtil() {
     }
 
-    public static <T> PageReqVO<T> getPageVO(List<T> list) {
-        PageReqVO<T> result = new PageReqVO<>();
+    public static <T> PageRespVO<T> getPageVO(List<T> list) {
+        PageRespVO<T> result = new PageRespVO<>();
         if (list instanceof Page) {
             Page<T> page = (Page<T>) list;
             result.setTotalRows(page.getTotal());
