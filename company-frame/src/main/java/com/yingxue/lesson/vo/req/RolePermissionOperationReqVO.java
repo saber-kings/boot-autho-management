@@ -18,9 +18,9 @@ import java.util.List;
 @Data
 @ApiModel(description = "封装角色权限关联的数据")
 public class RolePermissionOperationReqVO {
-    @ApiModelProperty(value = "角色id")
+    @ApiModelProperty("角色id")
     private String roleId;
 
-    @ApiModelProperty(value = "菜单权限集合")
+    @ApiModelProperty("菜单权限集合")
     private List<String> permissionIds;
 }

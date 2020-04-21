@@ -37,14 +37,12 @@ public class UserController {
     @PostMapping("/user/login")
     @ApiOperation(value = "用户登录接口")
     public DataResult<LoginRespVO> login(@RequestBody @Valid LoginReqVO vo) {
-        DataResult<LoginRespVO> result = DataResult.success();
-        result.setData(userService.login(vo));
-        return result;
+        return DataResult.success(userService.login(vo));
     }
 
     @GetMapping("/user/logout")
     @ApiOperation(value = "用户登出接口")
-    public DataResult logout(HttpServletRequest request) {
+    public DataResult<Object> logout(HttpServletRequest request) {
         String accessToken = request.getHeader(Constant.ACCESS_TOKEN);
         String refreshToken = request.getHeader(Constant.REFRESH_TOKEN);
         userService.logout(accessToken, refreshToken);
@@ -53,7 +51,7 @@ public class UserController {
 
     @GetMapping("/user/unLogin")
     @ApiOperation(value = "引导客户端去登录")
-    public DataResult unLogin() {
+    public DataResult<Object> unLogin() {
         return DataResult.getResult(BaseResponseCode.TOKEN_ERROR);
     }
 
@@ -61,9 +59,7 @@ public class UserController {
     @ApiOperation(value = "分页查询用户接口")
     @RequiresPermissions("sys:user:list")
     public  DataResult<PageRespVO<SysUser>> pageInfo(@RequestBody UserPageReqVO vo){
-        DataResult<PageRespVO<SysUser>> result = DataResult.success();
-        result.setData(userService.pageInfo(vo));
-        return result;
+        return DataResult.success(userService.pageInfo(vo));
     }
 
 }

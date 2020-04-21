@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @Author: Saber污妖王
- * TODO: 首页菜单栏VO
+ * TODO: 首页菜单栏的数据封装类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/27
@@ -16,7 +16,7 @@ import java.util.List;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "首页菜单栏的数据封装类")
+@ApiModel(description = "返回首页菜单栏的数据")
 public class HomeRespVO {
     @ApiModelProperty("用户信息")
     private UserInfoRespVO userInfoVO;

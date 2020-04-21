@@ -79,76 +79,76 @@ public class DataResult<T> {
      * @UpdateUser: Saber污妖王
      * @Version: 0.0.1
      */
-    public static <T> DataResult success() {
-        return new DataResult<T>();
+    public static <T> DataResult<T> success() {
+        return new DataResult<>();
     }
 
     /**
      * 操作成功 data 不为null
      *
-     * @param data
+     * @param data 结果
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
      * @UpdateUser: Saber污妖王
      * @Version: 0.0.1
      */
-    public static <T> DataResult success(T data) {
-        return new DataResult<T>(data);
+    public static <T> DataResult<T> success(T data) {
+        return new DataResult<>(data);
     }
 
     /**
      * 自定义 返回操作 data 可控
      *
-     * @param code
-     * @param msg
-     * @param data
+     * @param code 响应码
+     * @param msg 提示
+     * @param data 结果
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
      * @UpdateUser: Saber污妖王
      * @Version: 0.0.1
      */
-    public static <T> DataResult getResult(int code, String msg, T data) {
-        return new DataResult<T>(code, msg, data);
+    public static <T> DataResult<T> getResult(int code, String msg, T data) {
+        return new DataResult<>(code, msg, data);
     }
 
     /**
      * 自定义返回  data为null
      *
-     * @param code
-     * @param msg
+     * @param code 响应码
+     * @param msg 提示
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
      * @UpdateUser: Saber污妖王
      * @Version: 0.0.1
      */
-    public static <T> DataResult getResult(int code, String msg) {
-        return new DataResult<T>(code, msg);
+    public static <T> DataResult<T> getResult(int code, String msg) {
+        return new DataResult<>(code, msg);
     }
 
     /**
      * 自定义返回 入参一般是异常code枚举 data为空
      *
-     * @param responseCode
+     * @param responseCode 响应码
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
      * @UpdateUser: Saber污妖王
      * @Version: 0.0.1
      */
-    public static <T> DataResult getResult(BaseResponseCode responseCode) {
-        return new DataResult<T>(responseCode);
+    public static <T> DataResult<T> getResult(BaseResponseCode responseCode) {
+        return new DataResult<>(responseCode);
     }
 
     /**
      * 自定义返回 入参一般是异常code枚举 data 可控
      *
-     * @param responseCode
-     * @param data
+     * @param responseCode 响应码
+     * @param data 结果
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
      * @UpdateUser: Saber污妖王
      * @Version: 0.0.1
      */
-    public static <T> DataResult getResult(BaseResponseCode responseCode, T data) {
-        return new DataResult<T>(responseCode, data);
+    public static <T> DataResult<T> getResult(BaseResponseCode responseCode, T data) {
+        return new DataResult<>(responseCode, data);
     }
 }

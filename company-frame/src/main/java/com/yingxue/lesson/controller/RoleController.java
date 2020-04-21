@@ -35,16 +35,12 @@ public class RoleController {
     @PostMapping("/roles")
     @ApiOperation(value = "分页获取角色数据")
     private DataResult<PageRespVO<SysRole>> pageInfo(@RequestBody RolePageReqVO vo){
-        DataResult<PageRespVO<SysRole>> result = DataResult.success();
-        result.setData(roleService.pageInfo(vo));
-        return result;
+        return DataResult.success(roleService.pageInfo(vo));
     }
 
     @PostMapping("/role")
     @ApiOperation(value = "新增角色接口")
     private DataResult<SysRole> addRole(@RequestBody @Valid AddRoleReqVO vo){
-        DataResult<SysRole> result = DataResult.success();
-        result.setData(roleService.addRole(vo));
-        return result;
+        return DataResult.success(roleService.addRole(vo));
     }
 }

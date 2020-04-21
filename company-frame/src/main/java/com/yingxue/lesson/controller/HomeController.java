@@ -35,8 +35,6 @@ public class HomeController {
     public DataResult<HomeRespVO> getHome(HttpServletRequest request) {
         String accessToken = request.getHeader(Constant.ACCESS_TOKEN);
         String userId = JwtTokenUtil.getUserId(accessToken);
-        DataResult<HomeRespVO> result = DataResult.success();
-        result.setData(homeService.getHome(userId));
-        return result;
+        return DataResult.success(homeService.getHome(userId));
     }
 }

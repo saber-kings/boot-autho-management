@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * @Author: Saber污妖王
- * TODO: 响应客户端登陆请求的数据
+ * TODO: 响应客户端登陆请求的数据封装类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/25
@@ -14,7 +14,7 @@ import lombok.Data;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "响应客户端登陆请求的数据")
+@ApiModel(description = "返回客户端登陆请求的结果数据")
 public class LoginRespVO {
     @ApiModelProperty("正常的业务token")
     private String accessToken;

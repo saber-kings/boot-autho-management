@@ -15,6 +15,8 @@ public class SysDept implements Serializable {
 
     private String pid;
 
+    private String pidName;
+
     private Integer status;
 
     private String relationCode;

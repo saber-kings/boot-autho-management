@@ -61,6 +61,11 @@ public class Constant {
     public static final String JWT_REFRESH_IDENTIFICATION="jwt-refreshed-identification_";
 
     /**
+     * 部门编码key
+     */
+    public static final String DEPT_CODE_KEY="dept-code-key_";
+
+    /**
      * UTF-8 编码的 JSON 格式
      */
     public static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";

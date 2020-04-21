@@ -93,7 +93,7 @@ logging:
   level:
     com:
       yingxue:
-      lesson: info
+      lesson: debug
 
 #加入以下配置 对应生成 mapper.xml 的路径
 mybatis:

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -152,7 +152,7 @@
                         },
                         {
                             field: 'pidName', title: '父级名称', templet: function (item) {
-                                if (item.pidName === null || item.pidName === undefined) {
+                                if (item.pidName == null ) {
                                     return "默认顶级菜单";
                                 } else {
                                     return item.pidName;
@@ -184,7 +184,7 @@
         };
         //初始化菜单权限树
         var initTree = function () {
-            CoreUtil.sendAjax("/api/permissions/tree", null, function (res) {
+            CoreUtil.sendAjax("/api/permission/tree", null, function (res) {
                 loadPermissionTree(res.data);
             }, "GET", false);
         };
@@ -203,6 +203,7 @@
             });
         };
         //新增菜单权限事件
+        var $operationMenu = $(".operation_menu input[name=status]");
         table.on('toolbar(menuTable)', function (obj) {
             switch (obj.event) {
                 case 'addMenu':
@@ -225,8 +226,8 @@
                     $(".operation_menu input[name=orderNum]").val("");
                     $(".operation_menu input[name=method]").val("");
                     $(".operation_menu input[name=code]").val("");
-                    $(".operation_menu input[name=status]").attr('checked', 'checked');
-                    $(".operation_menu input[name=status]").attr('type', 'hidden').val(1);
+                    $operationMenu.attr('checked', 'checked');
+                    $operationMenu.attr('type', 'hidden').val(1);
                     var x = document.getElementsByClassName("layui-unselect layui-form-switch");
                     x[0].setAttribute("class", "layui-unselect layui-form-switch layui-form-onswitch");
                     var d = document.getElementsByTagName('em')[0];
@@ -293,7 +294,7 @@
         });
         //监听指定开关
         form.on('switch(switch)', function () {
-            $(".operation_menu input[name=status]").attr('type', 'hidden').val(this.checked ? 1 : 0);
+            $operationMenu.attr('type', 'hidden').val(this.checked ? 1 : 0);
         });
 
         //监听提交

@@ -16,7 +16,7 @@ import java.util.List;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "菜单权限表的数据封装类")
+@ApiModel(description = "返回菜单权限表的数据")
 public class PermissionRespNodeVO {
     @ApiModelProperty("主键id")
     private String id;
@@ -25,7 +25,7 @@ public class PermissionRespNodeVO {
     @ApiModelProperty("菜单权限名称")
     private String title;
     @ApiModelProperty("子集集合")
-    private List<?> children;
+    private List<PermissionRespNodeVO> children;
     @ApiModelProperty("是否展开 默认不展开(false)")
     private boolean spread=true;
 }

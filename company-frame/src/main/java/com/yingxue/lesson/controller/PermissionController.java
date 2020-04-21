@@ -32,32 +32,24 @@ public class PermissionController {
     @GetMapping("/permissions")
     @ApiOperation("获取所有的菜单权限数据")
     public DataResult<List<SysPermission>> getAllPermission(){
-        DataResult<List<SysPermission>> result = DataResult.success();
-        result.setData(permissionService.selectAll());
-        return result;
+        return DataResult.success(permissionService.selectAll());
     }
 
-    @GetMapping("/permissions/tree")
+    @GetMapping("/permission/tree")
     @ApiOperation("菜单权限树接口-只递归查询到菜单")
     public DataResult<List<PermissionRespNodeVO>> getAllPermissionTreeExcBtn(){
-        DataResult<List<PermissionRespNodeVO>> result = DataResult.success();
-        result.setData(permissionService.selectAllMenuByTree());
-        return result;
+        return DataResult.success(permissionService.selectAllMenuByTree());
     }
 
-    @GetMapping("/permissions/tree/all")
+    @GetMapping("/permission/tree/all")
     @ApiOperation("菜单权限树接口-递归查询所有")
     public DataResult<List<PermissionRespNodeVO>> getAllPermissionTree(){
-        DataResult<List<PermissionRespNodeVO>> result = DataResult.success();
-        result.setData(permissionService.selectAllTree());
-        return result;
+        return DataResult.success(permissionService.selectAllTree());
     }
 
     @PostMapping("/permission")
     @ApiOperation(value = "新增菜单权限接口")
     public DataResult<SysPermission> addPermission(@RequestBody @Valid PermissionAddReqVO vo){
-        DataResult<SysPermission> result = DataResult.success();
-        result.setData(permissionService.addPermission(vo));
-        return result;
+        return DataResult.success(permissionService.addPermission(vo));
     }
 }

@@ -54,4 +54,10 @@ public class IndexController {
     public String roles(){
         return "roles/role";
     }
+
+    @GetMapping("/depts")
+    @ApiOperation("跳转部门管理页面")
+    public String depts(){
+        return "depts/dept";
+    }
 }

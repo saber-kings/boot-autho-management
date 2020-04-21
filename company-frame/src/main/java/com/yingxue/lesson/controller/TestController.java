@@ -33,9 +33,9 @@ public class TestController {
 
     @GetMapping("/home")
     @ApiOperation(value = "测试统一返回格式的接口")
-    public DataResult getHome() {
+    public DataResult<Object> getHome() {
 //        DataResult<String> result = DataResult.success();
-        DataResult result = DataResult.getResult(BaseResponseCode.SUCCESS);
+        DataResult<Object> result = DataResult.getResult(BaseResponseCode.SUCCESS);
 //        result.setData("哈哈哈哈！请求成功了！");
         List<String> list = new ArrayList<>();
         list.add("a");
@@ -51,12 +51,12 @@ public class TestController {
         if(!(type.equals("1")||type.equals("2")||type.equals("3"))){
             throw new BusinessException(BaseResponseCode.DATA_ERROR);
         }
-        return (DataResult<String>) new DataResult(0,type);
+        return new DataResult<>(0, type);
     }
 
     @PostMapping("/valid/error")
     @ApiOperation(value = "测试 Validator 抛出业务异常接口")
-    public DataResult testValid(@RequestBody @Valid TestReqVO vo){
+    public DataResult<Object> testValid(@RequestBody @Valid TestReqVO vo){
         return DataResult.success();
     }
 
