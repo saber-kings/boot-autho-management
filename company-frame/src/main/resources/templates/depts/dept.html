@@ -165,6 +165,7 @@
         };
 
         //新增部门事件
+        var $operationDept = $(".operation_dept input[name=status]");
         table.on('toolbar(deptTable)', function (obj) {
             switch (obj.event) {
                 case 'addDept':
@@ -180,8 +181,8 @@
                     $(".operation_dept input[name=pidName]").val("");
                     $(".operation_dept input[name=managerName]").val("");
                     $(".operation_dept input[name=phone]").val("");
-                    $(".operation_dept input[name=status]").attr('checked', 'checked');
-                    $(".operation_dept input[name=status]").attr('type', 'hidden').val(1);
+                    $operationDept.attr('checked', 'checked');
+                    $operationDept.attr('type', 'hidden').val(1);
                     var x = document.getElementsByClassName("layui-unselect layui-form-switch");
                     x[0].setAttribute("class", "layui-unselect layui-form-switch layui-form-onswitch");
                     var d = document.getElementsByTagName('em')[0];
@@ -217,7 +218,7 @@
 
         //监听指定开关
         form.on('switch(switch)', function () {
-            $(".operation_dept input[name=status]").attr('type', 'hidden').val(this.checked ? 1 : 0);
+            $operationDept.attr('type', 'hidden').val(this.checked ? 1 : 0);
         });
 
         //编辑或新增的界面取消事件

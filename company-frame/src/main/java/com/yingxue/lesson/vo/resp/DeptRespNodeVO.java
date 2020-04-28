@@ -28,5 +28,5 @@ public class DeptRespNodeVO {
     private boolean spread = true;
 
     @ApiModelProperty("子集/叶子节点")
-    private List<?> children;
+    private List<DeptRespNodeVO> children;
 }

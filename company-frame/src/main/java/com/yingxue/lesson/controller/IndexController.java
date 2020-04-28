@@ -60,4 +60,10 @@ public class IndexController {
     public String depts(){
         return "depts/dept";
     }
+
+    @GetMapping("/users")
+    @ApiOperation("跳转用户管理页面")
+    public String users(){
+        return "users/user";
+    }
 }

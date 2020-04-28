@@ -1,16 +1,21 @@
 package com.yingxue.lesson.service.impl;
 
+import java.util.*;
+
 import com.github.pagehelper.PageHelper;
 import com.yingxue.lesson.constants.Constant;
+import com.yingxue.lesson.entity.SysDept;
 import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.exception.BusinessException;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
+import com.yingxue.lesson.mapper.SysDeptMapper;
 import com.yingxue.lesson.mapper.SysUserMapper;
 import com.yingxue.lesson.service.RedisService;
 import com.yingxue.lesson.service.UserService;
 import com.yingxue.lesson.utils.JwtTokenUtil;
 import com.yingxue.lesson.utils.PageUtil;
 import com.yingxue.lesson.utils.PasswordUtils;
+import com.yingxue.lesson.vo.req.AddUserReqVO;
 import com.yingxue.lesson.vo.req.LoginReqVO;
 import com.yingxue.lesson.vo.req.UserPageReqVO;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
@@ -18,14 +23,11 @@ import com.yingxue.lesson.vo.resp.PageRespVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private RedisService redisService;
+
+    @Resource
+    private SysDeptMapper sysDeptMapper;
 
     @Override
     public LoginRespVO login(LoginReqVO vo) {
@@ -108,6 +113,12 @@ public class UserServiceImpl implements UserService {
         //Mapper接口方式的调用，推荐这种使用方式。
         PageHelper.startPage(vo.getPageNum(), vo.getPageSize());
         List<SysUser> sysUsers = sysUserMapper.selectAll(vo);
+        sysUsers.forEach(s -> {
+            SysDept sysDept = sysDeptMapper.selectByPrimaryKey(s.getDeptId());
+            if (sysDept != null) {
+                s.setDeptName(sysDept.getName());
+            }
+        });
         return PageUtil.getPageVO(sysUsers);
     }
 
@@ -156,5 +167,21 @@ public class UserServiceImpl implements UserService {
             list.add("sys:user:detail");
         }
         return list;
+    }
+
+    @Override
+    public void addUser(AddUserReqVO vo) {
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(vo, sysUser);
+        sysUser.setId(UUID.randomUUID().toString());
+        sysUser.setCreateTime(new Date());
+        String salt = PasswordUtils.getSalt();
+        String ecdPwd = PasswordUtils.encode(vo.getPassword(), salt);
+        sysUser.setSalt(salt);
+        sysUser.setPassword(ecdPwd);
+        int i = sysUserMapper.insertSelective(sysUser);
+        if (i != 1) {
+            throw new BusinessException(BaseResponseCode.OPERATION_ERROR);
+        }
     }
 }

@@ -17,6 +17,8 @@ public class SysUser implements Serializable {
 
     private String phone;
 
+    private String deptName;
+
     private String deptId;
 
     private String realName;

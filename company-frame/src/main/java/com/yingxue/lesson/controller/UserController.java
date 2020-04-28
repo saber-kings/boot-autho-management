@@ -5,6 +5,7 @@ import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.service.UserService;
 import com.yingxue.lesson.utils.DataResult;
+import com.yingxue.lesson.vo.req.AddUserReqVO;
 import com.yingxue.lesson.vo.req.LoginReqVO;
 import com.yingxue.lesson.vo.req.UserPageReqVO;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
@@ -57,9 +58,18 @@ public class UserController {
 
     @PostMapping("/users")
     @ApiOperation(value = "分页查询用户接口")
-    @RequiresPermissions("sys:user:list")
+//    @RequiresPermissions("sys:user:list")
     public  DataResult<PageRespVO<SysUser>> pageInfo(@RequestBody UserPageReqVO vo){
         return DataResult.success(userService.pageInfo(vo));
+    }
+
+    @PostMapping("/user")
+    @ApiOperation(value = "新增用户接口")
+//    @RequiresPermissions("sys:user:list")
+    public  DataResult<Object> addUser(@RequestBody @Valid AddUserReqVO vo){
+        DataResult<Object> result = DataResult.success();
+        userService.addUser(vo);
+        return result;
     }
 
 }
