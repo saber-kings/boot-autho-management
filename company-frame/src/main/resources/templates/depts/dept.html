@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xml:th="http://www.thymeleaf.org">
+<html lang="en" xml:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -64,10 +64,14 @@
 </body>
 <script type="text/html" id="toolbar">
     <div class="layui-btn-group">
-        <button type="button" class="layui-btn" lay-event="addDept">
+        <button type="button" class="layui-btn" lay-event="addDept" shiro:hasPermission="sys:dept:add">
             <i class="layui-icon">&#xe608;</i> 添加
         </button>
     </div>
+</script>
+<script type="text/html" id="tool">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" shiro:hasPermission="sys:dept:update">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" shiro:hasPermission="sys:dept:delete">删除</a>
 </script>
 <script src="/layui/layui.js"></script>
 <script src="/js/core.util.js"></script>
@@ -87,7 +91,12 @@
         var loadDeptTreeTable = function () {
             CoreUtil.sendAjax("/api/depts", null, function (res) {
                 renderTable(res.data);
-            }, "GET", false);
+            }, "GET", false, function (res) {
+                //无权限访问部门限列表提示
+                layer.msg("抱歉！您暂无获取部门列表的权限");
+                var noAuthorityData = [];
+                renderTable(noAuthorityData);
+            });
         };
         loadDeptTreeTable();
 
@@ -125,10 +134,10 @@
                         {field: 'phone', title: '部门经理联系电话'},
                         {
                             field: 'status', title: '状态', templet: function (item) {
-                                if (item.status === 1) {
+                                if (Number(item.status) === 1) {
                                     return ' <input type="checkbox" lay-skin="switch" lay-text="启用|禁用" checked disabled>';
                                 }
-                                if (item.status === 0) {
+                                if (Number(item.status) === 0) {
                                     return ' <input type="checkbox" lay-skin="switch" lay-text="启用|禁用" disabled>';
                                 }
                             }
@@ -138,16 +147,22 @@
                                 return CoreUtil.formattime(item.createTime);
                             }
                         },
-                        {title: '操作', width: 250}
+                        {title: '操作', width: 250, toolbar: '#tool'}
                     ]
                 ]
             });
         };
 
-        var initTree = function () {
-            CoreUtil.sendAjax("/api/dept/tree", null, function (res) {
+        var initTree = function (id) {
+            var param = {deptId: id};
+            CoreUtil.sendAjax("/api/dept/tree", param, function (res) {
                 loadDeptTree(res.data);
-            }, "GET", false);
+            }, "GET", false, function (res) {
+                //无条件获取部门树提示
+                layer.msg("抱歉！您暂无获取部门树的权限");
+                var noAuthorityData=[];
+                loadDeptTree(noAuthorityData);
+            });
         };
 
         //加载部门树数据
@@ -188,7 +203,7 @@
                     var d = document.getElementsByTagName('em')[0];
                     d.firstChild.nodeValue = '启用';
                     form.render(); //更新全部
-                    initTree();
+                    initTree("");
                     break;
             }
         });
@@ -241,10 +256,82 @@
                     $(".dept-table").show();
                     //隐藏编辑窗口
                     $(".operation_dept").hide();
-                }, "POST", false);
+                }, "POST", false, function (res) {
+                    //无权限新增部门提示
+                    layer.msg("抱歉！您暂无新增部门的权限");
+                });
+            } else {
+                CoreUtil.sendAjax("/api/dept", JSON.stringify(data.field), function (res) {
+                    loadDeptTreeTable();
+                    //显示表格
+                    $(".dept-table").show();
+                    //隐藏编辑窗口
+                    $(".operation_dept").hide();
+                }, "PUT", false, function (res) {
+                    //无条件更新部门提示
+                    layer.msg("抱歉！您暂无编辑部门的权限");
+                });
             }
             return false;
         });
+
+        //操作项事件
+        table.on('tool(deptTable)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'edit':
+                    selectNode = null;
+                    //隐藏表格
+                    $(".dept-table").hide();
+                    //显示编辑窗口
+                    $(".operation_dept").show();
+                    $(".title").html("编辑部门");
+                    $(".operation_dept input[name=id]").val(data.id);
+                    $(".operation_dept input[name=pid]").val(data.pid);
+                    $(".operation_dept input[name=name]").val(data.name);
+                    $(".operation_dept input[name=pidName]").val(data.pidName);
+                    $(".operation_dept input[name=managerName]").val(data.managerName);
+                    $(".operation_dept input[name=phone]").val(data.phone);
+                    var x = document.getElementsByClassName("layui-unselect layui-form-switch");
+                    var d = document.getElementsByTagName('em')[0];
+                    if (Number(data.status) === 1) {
+                        $operationDept.attr('checked', 'checked');
+                        $operationDept.attr('type', 'hidden').val(1);
+                        x[0].setAttribute("class", "layui-unselect layui-form-switch layui-form-onswitch");
+                        d.firstChild.nodeValue = '启用';
+                    } else {
+                        $operationDept.attr('type', 'hidden').removeAttr("checked").val(0);
+                        // var x = document.getElementsByClassName("layui-unselect layui-form-switch");
+                        x[0].setAttribute("class", "layui-unselect layui-form-switch");
+                        // var d = document.getElementsByTagName('em')[0];
+                        d.firstChild.nodeValue = '禁用';
+                    }
+                    form.render(); //更新全部
+                    initTree(data.id);
+                    break;
+                case 'del':
+                    // layer.msg("确定删除" + data.name);
+                    deletedDept(data.id, data.name);
+                    break;
+            }
+        });
+
+        //删除操作
+        var deletedDept = function (deptId, menuName) {
+            layer.open({
+                content: '确定要删除 ' + menuName + " 吗?",
+                yes: function (index, layero) {
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                    CoreUtil.sendAjax("/api/dept/" + deptId, null, function (res) {
+                        layer.msg(res.msg);
+                        loadDeptTreeTable();
+                    }, "DELETE", false, function (res) {
+                        //无权限删除部门提示
+                        layer.msg("抱歉！您暂无删除部门数据的权限");
+                    });
+                }
+            });
+        };
 
     });
 </script>

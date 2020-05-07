@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @Author: Saber污妖王
- * TODO: 响应分页的数据封装类
+ * TODO: 响应分页查询请求的数据封装类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/25
@@ -16,7 +16,7 @@ import java.util.List;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "返回分页的相关数据")
+@ApiModel(description = "返回分页查询的相关数据")
 public class PageRespVO<T> {
     /**
      * 总记录数

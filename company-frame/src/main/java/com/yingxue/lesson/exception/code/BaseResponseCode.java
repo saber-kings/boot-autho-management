@@ -27,8 +27,8 @@ public enum BaseResponseCode implements ResponseCodeInterface {
     DATA_ERROR(4000001, "传入数据异常"),
     METHOD_IDENTITY_ERROR(4000002, "数据校验异常"),
     ACCOUNT_ERROR(4000003, "该账号不存在"),
-    ACCOUNT_LOCK(4010001, "该账号被锁定，请联系管理员"),
-    ACCOUNT_PASSWORD_ERROR(4000004, "密码错误"),
+    ACCOUNT_LOCK(4010001, "该账号被锁定,请联系系统管理员"),
+    ACCOUNT_PASSWORD_ERROR(4000004, "用户名密码不匹配"),
     TOKEN_ERROR(4010001, "用户未登录，请重新登录"),
     TOKEN_NOT_NULL(4010001, "token 不能为空"),
     SHIRO_AUTHENTICATION_EXCEPTION(4010001, "用户认证异常"),
@@ -53,12 +53,12 @@ public enum BaseResponseCode implements ResponseCodeInterface {
     /**
      * 响应码
      */
-    private int code;
+    private final int code;
 
     /**
      * 提示
      */
-    private String msg;
+    private final String msg;
 
     @Override
     public int getCode() {

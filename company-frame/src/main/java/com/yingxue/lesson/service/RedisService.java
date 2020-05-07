@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: 小霍
- * TODO: Redis 工具类
+ * TODO: Redis 业务操作相关工具类
  * @UpdateUser: Saber污妖王
  * @Project: company-frame
  * @Date: 2020/3/24

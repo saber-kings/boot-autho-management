@@ -6,7 +6,7 @@ import lombok.Data;
 
 /**
  * @Author: Saber污妖王
- * TODO: 角色信息分页的数据封装类
+ * TODO: 角色信息分页查询的数据封装类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/4/19
@@ -14,7 +14,7 @@ import lombok.Data;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "接收前端提交的角色信息分页的数据")
+@ApiModel(description = "接收前端分页查询角色信息请求提交的数据")
 public class RolePageReqVO {
     @ApiModelProperty("第几页")
     private int pageNum = 1;

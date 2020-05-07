@@ -12,7 +12,7 @@ package com.yingxue.lesson.utils;
 public class CodeUtil {
 
     private static final String DEPT_TPYE = "YXD";
-    private static final String PERMISSION_TPYE = "YXP";
+//    private static final String PERMISSION_TPYE = "YXP";
 
     /**
      * 右补位，左对齐

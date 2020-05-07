@@ -14,7 +14,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
  */
 @AllArgsConstructor
 public class CustomUsernamePasswordToken extends UsernamePasswordToken {
-    private String token;
+    private final String token;
 
     @Override
     public Object getPrincipal() {

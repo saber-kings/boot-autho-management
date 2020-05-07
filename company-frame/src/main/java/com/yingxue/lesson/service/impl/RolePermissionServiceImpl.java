@@ -9,7 +9,6 @@ import com.yingxue.lesson.vo.req.RolePermissionOperationReqVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 
 /**
  * @Author: Saber污妖王
- * TODO: 类文件简单描述
+ * TODO: 角色权限关联业务层实现类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/4/20
@@ -31,7 +30,8 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public void addRolePermission(RolePermissionOperationReqVO vo) {
-        if (vo.getPermissionIds()!=null&&!vo.getPermissionIds().isEmpty()) {
+        sysRolePermissionMapper.removeByRoleId(vo.getRoleId());
+        if (vo.getPermissionIds() != null && !vo.getPermissionIds().isEmpty()) {
             List<SysRolePermission> list = vo.getPermissionIds().stream().map(permissionId -> {
                 SysRolePermission sysRolePermission = new SysRolePermission();
                 sysRolePermission.setId(UUID.randomUUID().toString());
@@ -42,9 +42,34 @@ public class RolePermissionServiceImpl implements RolePermissionService {
             }).collect(Collectors.toList());
 
             int i = sysRolePermissionMapper.batchInsertRolePermission(list);
-            if (i==0) {
+            if (i == 0) {
                 throw new BusinessException(BaseResponseCode.OPERATION_ERROR);
             }
         }
+    }
+
+    @Override
+    public List<String> getRoleIdsByPermissionId(String permissionId) {
+        return sysRolePermissionMapper.getRoleIdsByPermissionId(permissionId);
+    }
+
+    @Override
+    public int removeByPermissionId(String permissionId) {
+        return sysRolePermissionMapper.removeByPermissionId(permissionId);
+    }
+
+    @Override
+    public List<String> getPermissionIdsByRoleId(String roleId) {
+        return sysRolePermissionMapper.getPermissionIdsByRoleId(roleId);
+    }
+
+    @Override
+    public int removeByRoleId(String roleId) {
+        return sysRolePermissionMapper.removeByRoleId(roleId);
+    }
+
+    @Override
+    public List<String> getPermissionIdsByRoleIds(List<String> roleIds) {
+        return sysRolePermissionMapper.getPermissionIdsByRoleIds(roleIds);
     }
 }

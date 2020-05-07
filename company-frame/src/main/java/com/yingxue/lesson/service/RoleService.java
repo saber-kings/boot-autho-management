@@ -1,9 +1,12 @@
 package com.yingxue.lesson.service;
 
 import com.yingxue.lesson.entity.SysRole;
-import com.yingxue.lesson.vo.req.AddRoleReqVO;
+import com.yingxue.lesson.vo.req.RoleAddReqVO;
 import com.yingxue.lesson.vo.req.RolePageReqVO;
+import com.yingxue.lesson.vo.req.RoleUpdateReqVO;
 import com.yingxue.lesson.vo.resp.PageRespVO;
+
+import java.util.List;
 
 /**
  * @Author: Saber污妖王
@@ -17,5 +20,15 @@ import com.yingxue.lesson.vo.resp.PageRespVO;
 public interface RoleService {
     PageRespVO<SysRole> pageInfo(RolePageReqVO vo);
 
-    SysRole addRole(AddRoleReqVO vo);
+    SysRole addRole(RoleAddReqVO vo);
+
+    List<SysRole> selectAll();
+
+    SysRole detailInfo(String id);
+
+    void updateRole(RoleUpdateReqVO vo);
+
+    void deletedRole(String id);
+
+    List<String> getNamesByIds(String userId);
 }

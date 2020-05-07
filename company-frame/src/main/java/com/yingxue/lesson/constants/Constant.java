@@ -2,7 +2,7 @@ package com.yingxue.lesson.constants;
 
 /**
  * @Author: Saber污妖王
- * TODO: 常量类
+ * TODO: 自定义常量类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/25
@@ -28,7 +28,12 @@ public class Constant {
     /**
      * refresh_token 主动退出后加入黑名单 key
      */
-    public static final String JWT_REFRESH_TOKEN_BLACKLIST = "jwt-refresh-token-blacklist_";
+    public static final String JWT_REFRESH_TOKEN_BLACKLIST = "jwt-refresh_token-blacklist_";
+
+    /**
+     * access_token 主动退出后加入黑名单 key
+     */
+    public static final String JWT_ACCESS_TOKEN_BLACKLIST = "jwt-access_token-blacklist_";
 
     /**
      * 正常 token
@@ -55,10 +60,10 @@ public class Constant {
      */
     public static final String JWT_REFRESH_KEY="jwt-refresh-key_";
 
-    /**
-     * 标记新的access_token
-     */
-    public static final String JWT_REFRESH_IDENTIFICATION="jwt-refreshed-identification_";
+//    /**
+//     * 标记新的 access_token
+//     */
+//    public static final String JWT_REFRESH_IDENTIFICATION="jwt-refreshed-identification_";
 
     /**
      * 部门编码key
@@ -69,4 +74,9 @@ public class Constant {
      * UTF-8 编码的 JSON 格式
      */
     public static final String APPLICATION_JSON_UTF8 = "application/json; charset=utf-8";
+
+    /**
+     * 用户权鉴缓存 key
+     */
+    public static final String IDENTIFY_CACHE_KEY="shiro-cache:com.yingxue.lesson.shiro.CustomRealm.authorizationCache:";
 }

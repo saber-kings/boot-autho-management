@@ -24,9 +24,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisCache<K, V> implements Cache<K, V> {
     private final static String PREFIX = "shiro-cache:";
-    private String cacheKey;
-    private long expire = 24;
-    private RedisService redisService;
+    private final String cacheKey;
+    private final RedisService redisService;
 
     public RedisCache(String name, RedisService redisService) {
         this.cacheKey = PREFIX + name + ":";
@@ -46,7 +45,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
                 return null;
             }
             SimpleAuthorizationInfo simpleAuthenticationInfo = JSON.parseObject(rawValue.toString(), SimpleAuthorizationInfo.class);
-            return (V) simpleAuthenticationInfo;
+            return ((V) simpleAuthenticationInfo);
         } catch (Exception e) {
             throw new CacheException(e);
         }
@@ -61,6 +60,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
         }
         try {
             String redisCacheKey = getRedisCacheKey(key);
+            long expire = 24;
             redisService.set(redisCacheKey, value, expire, TimeUnit.HOURS);
             return value;
         } catch (Exception e) {

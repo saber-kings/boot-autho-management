@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "接收前端提交的添加菜单权限的请求数据")
+@ApiModel(description = "接收前端添加菜单权限请求提交的数据")
 public class PermissionAddReqVO {
     @ApiModelProperty("菜单权限名称")
     @NotBlank(message = "菜单权限名称不能为空")

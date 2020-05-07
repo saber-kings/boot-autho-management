@@ -3,7 +3,7 @@
 var CoreUtil = (function () {
     var coreUtil = {};
     /*ajax请求*/
-    coreUtil.sendAjax = function (url, params, ft, method, headers, async, contentType) {
+    coreUtil.sendAjax = function (url, params, ft, method, headers, noAuthorityFt, async, contentType) {
         var roleSaveLoading = top.layer.msg('数据提交中，请稍候', {icon: 16, time: false, shade: 0.8});
         layui.jquery.ajax({
             url: url,
@@ -25,9 +25,34 @@ var CoreUtil = (function () {
             success: function (res) {
                 top.layer.close(roleSaveLoading);
                 if (typeof ft == "function") {
-                    if (res.code == 0) {
+                    if (res.code === 4010001) {
+                        top.window.location.href = "/index/login";
+                    } else if (res.code === 4010002) {
+                        /*要记录当前请求的数据*/
+                        var reUrl = url;
+                        var reParams = params;
+                        var reFt = ft;
+                        var reMethod = method;
+                        var reHeaders = headers;
+                        var reAsync = async;
+                        var reNoAuthorityFt = noAuthorityFt;
+                        var reContentType = contentType;
+                        /*调用刷新接口*/
+                        CoreUtil.sendAjax("/api/user/token", null, function (res) {
+                            if (res.code === 0) {
+                                CoreUtil.setData("access_token", res.data);
+                                setTimeout(function () {
+                                    CoreUtil.sendAjax(reUrl, reParams, reFt, reMethod, reHeaders, reNoAuthorityFt, reAsync, reContentType);
+                                }, 1000);
+                            }
+                        }, "GET", true);
+                    } else if (res.code === 0) {
                         if (ft != null && ft != undefined) {
                             ft(res);
+                        }
+                    } else if (res.code === 4030001) {
+                        if (ft != null && ft != undefined) {
+                            noAuthorityFt(res);
                         }
                     } else {
                         layer.msg(res.msg)
@@ -35,7 +60,7 @@ var CoreUtil = (function () {
                 }
             }, error: function (XMLHttpRequest, textStatus, errorThrown) {
                 top.layer.close(roleSaveLoading);
-                if (XMLHttpRequest.status == 404) {
+                if (XMLHttpRequest.status === 404) {
                     top.window.location.href = "/index/404";
                 } else {
                     layer.msg("服务器好像除了点问题！请稍后试试");
@@ -57,7 +82,7 @@ var CoreUtil = (function () {
     };
     /*格式化时间格式*/
     coreUtil.formattime = function (val) {
-        if (val == null || val == undefined) {
+        if (val == null) {
             return "";
         }
         var date = new Date(val);

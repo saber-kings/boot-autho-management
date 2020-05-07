@@ -14,16 +14,20 @@ import lombok.Data;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "返回客户端登陆请求的结果数据")
+@ApiModel(description = "返回登陆请求结果的相关数据")
 public class LoginRespVO {
     @ApiModelProperty("正常的业务token")
     private String accessToken;
+
     @ApiModelProperty("刷新token")
     private String refreshToken;
+
     @ApiModelProperty("用户名")
     private String username;
+
     @ApiModelProperty("用户id")
     private String id;
+
     @ApiModelProperty("电话")
     private String phone;
 }

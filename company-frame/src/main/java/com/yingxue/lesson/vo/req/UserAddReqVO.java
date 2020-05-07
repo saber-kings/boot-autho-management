@@ -16,8 +16,8 @@ import javax.validation.constraints.NotBlank;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "接收客户端表单新增用户提交的数据")
-public class AddUserReqVO {
+@ApiModel(description = "接收前端新增用户请求提交的数据")
+public class UserAddReqVO {
     @ApiModelProperty("账号")
     @NotBlank(message = "账号不能为空")
     private String username;

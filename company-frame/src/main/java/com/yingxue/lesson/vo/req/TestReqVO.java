@@ -24,9 +24,11 @@ public class TestReqVO {
     @ApiModelProperty("名称")
     @NotBlank(message = "名称不能为空")
     private String name;
+
     @NotNull(message = "age 不能为空")
     @ApiModelProperty("年龄")
     private Integer age;
+
     @NotEmpty(message = "id 集合不能为空")
     @ApiModelProperty("id集合")
     private List<String> ids;

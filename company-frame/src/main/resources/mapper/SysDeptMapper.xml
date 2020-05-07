@@ -182,4 +182,34 @@
         FROM sys_dept
         where deleted = 1
     </select>
+    <!-- @Description:    维护 relation_code 的层级关系-->
+    <!-- @Author:    Saber污妖王-->
+    <update id="updateRelationCode">
+        UPDATE sys_dept
+        set relation_code = replace(relation_code, #{oldStr}, #{newStr})
+        where relation_code LIKE CONCAT(#{relationCode}, '%')
+    </update>
+    <!-- @Description:    查询该组织下的所有子集包括自己-->
+    <!-- @Author:    Saber污妖王-->
+    <select id="selectChildIds" resultType="java.lang.String">
+        select id
+        from sys_dept
+        where relation_code LIKE CONCAT(#{relationCode}, '%')
+          and deleted = 1
+    </select>
+    <!-- @Description:    更新删除部门数据-->
+    <!-- @Author:    Saber污妖王-->
+    <update id="deletedDepts">
+        update sys_dept
+        <set>
+            deleted = 0,
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

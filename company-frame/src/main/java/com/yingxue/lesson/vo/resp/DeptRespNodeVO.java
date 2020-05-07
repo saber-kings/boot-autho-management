@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @Author: Saber污妖王
- * TODO: 响应查询部门树的数据封装类
+ * TODO: 响应查询部门树请求的数据封装类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/4/21
@@ -16,7 +16,7 @@ import java.util.List;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "返回部门树的数据")
+@ApiModel(description = "返回部门树的相关数据")
 public class DeptRespNodeVO {
     @ApiModelProperty("部门id")
     private String id;

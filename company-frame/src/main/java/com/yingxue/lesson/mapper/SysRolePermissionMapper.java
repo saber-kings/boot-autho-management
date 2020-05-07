@@ -18,4 +18,14 @@ public interface SysRolePermissionMapper {
     int updateByPrimaryKey(SysRolePermission record);
 
     int batchInsertRolePermission(List<SysRolePermission> list);
+
+    List<String> getRoleIdsByPermissionId(String permissionId);
+
+    int removeByPermissionId(String permissionId);
+
+    List<String> getPermissionIdsByRoleId(String roleId);
+
+    int removeByRoleId(String roleId);
+
+    List<String> getPermissionIdsByRoleIds(List<String> roleIds);
 }

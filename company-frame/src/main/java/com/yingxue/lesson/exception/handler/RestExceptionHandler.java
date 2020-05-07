@@ -21,8 +21,8 @@ import java.util.List;
  * @Package: com.yingxue.lesson.exception.handler
  * @Version: 0.0.1
  */
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class RestExceptionHandler {
     /**
      * 系统异常，请稍候再试
@@ -31,7 +31,7 @@ public class RestExceptionHandler {
      * @return com.yingxue.lesson.utils.DataResult
      */
     @ExceptionHandler(value = Exception.class)
-    public DataResult handleException(Exception e) {
+    public DataResult<Object> handleException(Exception e) {
         log.error("Exception,{}", e.getLocalizedMessage());
         return DataResult.getResult(BaseResponseCode.SYSTEM_ERROR);
     }
@@ -43,7 +43,7 @@ public class RestExceptionHandler {
      * @return com.yingxue.lesson.utils.DataResult
      */
     @ExceptionHandler(value = BusinessException.class)
-    public DataResult businessException(BusinessException e) {
+    public DataResult<Object> businessException(BusinessException e) {
         log.error("Exception,{}", e.getLocalizedMessage());
         return DataResult.getResult(e.getCode(), e.getDefaultMessage());
     }
@@ -54,14 +54,14 @@ public class RestExceptionHandler {
      * @return com.yingxue.lesson.utils.DataResult
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public DataResult methodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public DataResult<Object> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("methodArgumentNotValidExceptionHandler bindingResult.allErrors():{},exception:{}",
                 e.getBindingResult().getAllErrors(), e.getLocalizedMessage());
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
         return createValidExceptionResp(errors);
     }
 
-    private DataResult createValidExceptionResp(List<ObjectError> errors) {
+    private DataResult<Object> createValidExceptionResp(List<ObjectError> errors) {
         String[] msgs = new String[errors.size()];
         int i = 0;
         for (ObjectError error : errors) {
@@ -73,8 +73,9 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(value = UnauthorizedException.class)
-    public DataResult unauthorizedException(UnauthorizedException e){
+    public DataResult<Object> unauthorizedException(UnauthorizedException e){
         log.error("UnauthorizedException,{}", e.getLocalizedMessage());
-         return DataResult.getResult(BaseResponseCode.NOT_PERMISSION);
+        return DataResult.getResult(BaseResponseCode.NOT_PERMISSION);
     }
 }
+

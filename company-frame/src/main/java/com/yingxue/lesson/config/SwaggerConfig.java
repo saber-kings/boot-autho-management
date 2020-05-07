@@ -70,13 +70,14 @@ public class SwaggerConfig {
                 new Tag("组织管理-菜单权限管理", "菜单权限管理相关接口"),
                 new Tag("组织管理-角色管理", "角色管理相关接口"),
                 new Tag("组织管理-部门管理", "部门管理相关接口"),
+                new Tag("系统管理-日志管理", "日志管理相关接口"),
         };
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("迎学教育")
-                .description("迎学教育-Spring Boot 实战系列")
+                .title("SaberKing")
+                .description("Spring Boot 实战后台权限管理系统")
                 .termsOfServiceUrl("")
                 .version("1.0")
                 .build();

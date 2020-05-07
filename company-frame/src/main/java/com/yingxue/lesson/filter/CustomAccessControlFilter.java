@@ -38,29 +38,27 @@ public class CustomAccessControlFilter extends AccessControlFilter {
      * @param request     请求
      * @param response    响应
      * @param mappedValue 参数
-     * @return boolean
-     * @throws Exception 抛出异常
+     * @return boolean 返回是否放行结果
      */
     @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         return false;
     }
 
     /**
      * 表示访问拒绝时是否自己处理
      * 如果返回 true 表示自己不处理且继续拦截器链的执行
-     * 返回false表示自己已经处理了（例如重定向到另一个页面）
+     * 返回 false 表示自己已经处理了（例如重定向到另一个页面）
      *
      * @param request  请求
      * @param response 响应
      * @return boolean
-     * @throws Exception 抛出异常
      */
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         log.info("请求的方式: {}", httpServletRequest.getMethod());
-        log.info("请求的方式: {}", httpServletRequest.getRequestURL().toString());
+        log.info("请求的URL: {}", httpServletRequest.getRequestURL().toString());
         //判断客户端是否携带 accessToken
         try {
             String accessToken = httpServletRequest.getHeader(Constant.ACCESS_TOKEN);
@@ -93,7 +91,7 @@ public class CustomAccessControlFilter extends AccessControlFilter {
     private void customResponse(int code, String msg, ServletResponse response) {
         // 自定义异常的类，用户返回给客户端相应的JSON格式的信息
         try {
-            DataResult result = DataResult.getResult(code, msg);
+            DataResult<Object> result = DataResult.getResult(code, msg);
             response.setContentType(Constant.APPLICATION_JSON_UTF8);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             String userJson = JSON.toJSONString(result);

@@ -17,8 +17,8 @@ import java.util.List;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "接收客户端表单新增角色提交的数据")
-public class AddRoleReqVO {
+@ApiModel(description = "接收前端新增角色请求提交的数据")
+public class RoleAddReqVO {
     @ApiModelProperty("角色名称")
     @NotBlank(message = "角色名称不能为空")
     private String name;

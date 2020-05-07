@@ -232,9 +232,7 @@ public class JwtTokenUtil {
         String refreshedToken;
         try {
             Claims claimsFromToken = getClaimsFromToken(refreshToken);
-            /**
-             * 刷新token的时候如果为空说明原先的 用户信息不变 所以就引用上个token里的内容
-             */
+            //刷新token的时候如果为空，说明原先的用户信息不变 所以就引用上个token里的内容
             if (null == claims) {
                 claims = claimsFromToken;
             }

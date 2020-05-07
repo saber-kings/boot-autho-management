@@ -191,6 +191,26 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from sys_permission
-    where deleted=1
+    where deleted=1 order by order_num desc
+  </select>
+  <!-- @Description:    查询该权限的子集-->
+  <!-- @Author:    Saber污妖王-->
+  <select id="selectChild" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from sys_permission
+    where pid = #{permissionId} and deleted = 1
+  </select>
+  <!-- @Description:    通过 id 集合获取信息-->
+  <!-- @Author:    Saber污妖王-->
+  <select id="selectInfoByIds" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"></include>
+    from sys_permission
+    where id in
+    <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    and deleted = 1
+    and status = 1
+    order by order_num desc
   </select>
 </mapper>

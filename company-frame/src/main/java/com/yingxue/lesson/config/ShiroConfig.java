@@ -1,5 +1,6 @@
 package com.yingxue.lesson.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.yingxue.lesson.filter.CustomAccessControlFilter;
 import com.yingxue.lesson.shiro.CustomHashedCredentialsMatcher;
 import com.yingxue.lesson.shiro.CustomRealm;
@@ -31,7 +32,7 @@ import java.util.Map;
 public class ShiroConfig {
 
     @Bean
-    public RedisCacheManager redisCacheManager(){
+    public RedisCacheManager redisCacheManager() {
         return new RedisCacheManager();
     }
 
@@ -94,6 +95,7 @@ public class ShiroConfig {
         map.put("/layui/**", "anon");
         map.put("/css/**", "anon");
         map.put("/treetable-lay/**", "anon");
+        map.put("/api/user/token", "anon");
         //放开swagger-ui地址
         map.put("/swagger/**", "anon");
         map.put("/v2/api-docs", "anon");
@@ -103,6 +105,8 @@ public class ShiroConfig {
         map.put("/favicon.ico", "anon");
         map.put("/captcha.jpg", "anon");
         map.put("/csrf", "anon");
+        //放开德鲁伊 SQL 监控地址
+        map.put("/druid/**", "anon");
         map.put("/**", "token,authc");
         //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
         shiroFilterFactoryBean.setLoginUrl("/api/user/unLogin");
@@ -133,5 +137,15 @@ public class ShiroConfig {
                 DefaultAdvisorAutoProxyCreator();
         defaultAdvisorAutoProxyCreator.setProxyTargetClass(true);
         return defaultAdvisorAutoProxyCreator;
+    }
+
+    /**
+     * 配置 shiro 标签支持方言
+     *
+     * @return shiro 方言组件
+     */
+    @Bean
+    public ShiroDialect shiroDialect() {
+        return new ShiroDialect();
     }
 }

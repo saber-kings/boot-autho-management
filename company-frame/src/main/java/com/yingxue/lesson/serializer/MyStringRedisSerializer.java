@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * @Author: Saber污妖王
- * TODO: 自定义 StringRedisSerializer 序列化
+ * TODO: 自定义 StringRedisSerializer 序列化工具
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/24

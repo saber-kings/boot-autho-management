@@ -16,14 +16,16 @@ import javax.validation.constraints.NotBlank;
  * @Version: 0.0.1
  */
 @Data
-@ApiModel(description = "接收客户端表单登陆提交数据")
+@ApiModel(description = "接收前端登陆请求提交的数据")
 public class LoginReqVO {
     @ApiModelProperty("账号")
     @NotBlank(message = "账号不能为空")
     private String username;
+
     @ApiModelProperty("密码")
     @NotBlank(message = "密码不能为空")
     private String password;
+
     @ApiModelProperty("登录类型(1.web 2.android 3.ios )")
     @NotBlank(message = "用户登录类型不能为空")
     private String type;

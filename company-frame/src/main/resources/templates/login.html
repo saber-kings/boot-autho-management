@@ -39,7 +39,7 @@
         <div><img src="/images/background2.png"></div>
     </div>
     <div class="layui-container login">
-        <form id="loginForm" action="/user/login" class="layui-form" method="post" layui-formpane>
+        <form id="loginForm" th:action="@{/user/login}" class="layui-form" method="post" layui-formpane>
             <input name="type"  type="hidden" value="1">
             <input type="text" name="username" lay-verify="required" placeholder="请输入账号"
                    autocomplete="off"   class="layui-input">
@@ -59,7 +59,7 @@
     layui.use(['form','jquery',"carousel"],function () {
         var layer = layui.layer;
         var form = layui.form;
-        var $ = layui.jquery;
+        // var $ = layui.jquery;
         var carousel = layui.carousel;
         form.on('submit',function (data) {
             CoreUtil.sendAjax("/api/user/login",JSON.stringify(data.field),function (res) {

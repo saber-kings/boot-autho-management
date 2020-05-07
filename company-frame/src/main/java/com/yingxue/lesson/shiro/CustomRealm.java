@@ -1,8 +1,13 @@
 package com.yingxue.lesson.shiro;
 
 import com.yingxue.lesson.constants.Constant;
+import com.yingxue.lesson.service.PermissionService;
+import com.yingxue.lesson.service.RedisService;
+import com.yingxue.lesson.service.RoleService;
+import com.yingxue.lesson.utils.CastUtils;
 import com.yingxue.lesson.utils.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -12,7 +17,9 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import java.util.Collection;
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: Saber污妖王
@@ -23,7 +30,17 @@ import java.util.Collection;
  * @Package: com.yingxue.lesson.shiro
  * @Version: 0.0.1
  */
+@Slf4j
 public class CustomRealm extends AuthorizingRealm {
+    @Resource
+    private RedisService redisService;
+
+    @Resource
+    private RoleService roleService;
+
+    @Resource
+    private PermissionService permissionService;
+
     @Override
     public boolean supports(AuthenticationToken token) {
         return token instanceof CustomUsernamePasswordToken;
@@ -34,18 +51,32 @@ public class CustomRealm extends AuthorizingRealm {
         String accessToken = (String) principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Claims claims = JwtTokenUtil.getClaimsFromToken(accessToken);
-        /**
-         * 返回该用户的角色信息给授权器
-         */
-        if (claims.get(Constant.JWT_ROLES_KEY) != null) {
-            info.addRoles((Collection<String>) claims.get(Constant.JWT_ROLES_KEY));
-        }
+        String userId = JwtTokenUtil.getUserId(accessToken);
+        log.info("userId={}", userId);
+        if (redisService.hasKey(Constant.JWT_REFRESH_KEY + userId) &&
+                redisService.getExpire(Constant.JWT_REFRESH_KEY + userId, TimeUnit.MILLISECONDS)
+                        > JwtTokenUtil.getRemainingTime(accessToken)) {
+            List<String> roles = roleService.getNamesByIds(userId);
+            if (roles != null && !roles.isEmpty()) {
+                info.addRoles(roles);
+            }
+            List<String> permissions = permissionService.getPermissionByUserId(userId);
+            if (permissions != null && !permissions.isEmpty()) {
+                info.addStringPermissions(permissions);
+            }
+        } else {
+            //返回该用户的角色信息给授权器
+            if (claims.get(Constant.JWT_ROLES_KEY) != null) {
+                //将得到的权限 List 集合类型转换成 List<String>，下同
+                List<String> roles = CastUtils.castList(claims.get(Constant.JWT_ROLES_KEY, List.class), String.class);
+                info.addRoles(roles);
+            }
 
-        /**
-         * 返回该用户的权限信息给授权器
-         */
-        if (claims.get(Constant.JWT_PERMISSIONS_KEY) != null) {
-            info.addStringPermissions((Collection<String>) claims.get(Constant.JWT_PERMISSIONS_KEY));
+            //返回该用户的权限信息给授权器
+            if (claims.get(Constant.JWT_PERMISSIONS_KEY) != null) {
+                List<String> permissions = CastUtils.castList(claims.get(Constant.JWT_PERMISSIONS_KEY, List.class), String.class);
+                info.addStringPermissions(permissions);
+            }
         }
         return info;
     }

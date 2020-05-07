@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @Author: Saber污妖王
- * TODO: 测试模块接口
+ * TODO: 测试模块相关接口
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/24
@@ -41,7 +41,8 @@ public class TestController {
         list.add("a");
         list.add("b");
         result.setData(list);
-        int i = 1 / 0;
+        //测试公共异常处理类是否生效
+//        int i = 1 / 0;
         return result;
     }
 
@@ -57,7 +58,7 @@ public class TestController {
     @PostMapping("/valid/error")
     @ApiOperation(value = "测试 Validator 抛出业务异常接口")
     public DataResult<Object> testValid(@RequestBody @Valid TestReqVO vo){
-        return DataResult.success();
+        return DataResult.success(vo);
     }
 
 }

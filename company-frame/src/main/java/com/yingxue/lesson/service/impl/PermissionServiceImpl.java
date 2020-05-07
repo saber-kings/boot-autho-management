@@ -1,44 +1,60 @@
 package com.yingxue.lesson.service.impl;
 
+import com.yingxue.lesson.constants.Constant;
 import com.yingxue.lesson.entity.SysPermission;
 import com.yingxue.lesson.exception.BusinessException;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.mapper.SysPermissionMapper;
 import com.yingxue.lesson.service.PermissionService;
+import com.yingxue.lesson.service.RedisService;
+import com.yingxue.lesson.service.RolePermissionService;
+import com.yingxue.lesson.service.UserRoleService;
+import com.yingxue.lesson.utils.TokenSettings;
 import com.yingxue.lesson.vo.req.PermissionAddReqVO;
+import com.yingxue.lesson.vo.req.PermissionUpdateReqVO;
 import com.yingxue.lesson.vo.resp.PermissionRespNodeVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * @Author: Saber污妖王
- * TODO: 类文件简单描述
+ * TODO: 权限业务层实现类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/31
  * @Package: com.yingxue.lesson.service.impl
  * @Version: 0.0.1
  */
+@Slf4j
 @Service
 public class PermissionServiceImpl implements PermissionService {
     @Resource
     private SysPermissionMapper sysPermissionMapper;
 
+    @Resource
+    private RolePermissionService rolePermissionService;
+
+    @Resource
+    private UserRoleService userRoleService;
+
+    @Resource
+    private RedisService redisService;
+
+    @Resource
+    private TokenSettings tokenSettings;
+
     @Override
     public List<SysPermission> selectAll() {
         List<SysPermission> sysPermissions = sysPermissionMapper.selectAll();
         if (!sysPermissions.isEmpty()) {
-//            for (SysPermission sysPermission : sysPermissions) {
-//                SysPermission parent = sysPermissionMapper.selectByPrimaryKey(sysPermission.getPid());
-//                if (parent != null) {
-//                    sysPermission.setPidName(parent.getName());
-//                }
-//            }
             sysPermissions.forEach(s -> {
                 SysPermission parent = sysPermissionMapper.selectByPrimaryKey(s.getPid());
                 if (parent != null) {
@@ -108,9 +124,9 @@ public class PermissionServiceImpl implements PermissionService {
     /**
      * 递归遍历所有数据
      *
-     * @param id
-     * @param all
-     * @return
+     * @param id 要判断是否是父节点的 id
+     * @param all 所有节点
+     * @return 最终返回传入权限的所有子节点
      */
     private List<PermissionRespNodeVO> getChild(String id, List<SysPermission> all) {
 //        List<PermissionRespNodeVO> list = new ArrayList<>();
@@ -129,7 +145,7 @@ public class PermissionServiceImpl implements PermissionService {
                 PermissionRespNodeVO respNodeVO = new PermissionRespNodeVO();
                 BeanUtils.copyProperties(s, respNodeVO);
                 respNodeVO.setTitle(s.getName());
-                respNodeVO.setChildren(getChildExcBtn(s.getId(), all));
+                respNodeVO.setChildren(getChild(s.getId(), all));
                 return respNodeVO;
             }
             return null;
@@ -144,17 +160,6 @@ public class PermissionServiceImpl implements PermissionService {
      * @return java.util.List<com.yingxue.lesson.vo.resp.PermissionRespNodeVO>
      */
     private List<PermissionRespNodeVO> getChildExcBtn(String id, List<SysPermission> all) {
-//        List<PermissionRespNodeVO> list = new ArrayList<>();
-//        for (SysPermission s : all) {
-//            if (s.getPid().equals(id) && s.getType() != 3) {
-//                PermissionRespNodeVO respNodeVO = new PermissionRespNodeVO();
-//                BeanUtils.copyProperties(s, respNodeVO);
-//                respNodeVO.setTitle(s.getName());
-//                respNodeVO.setChildren(getChildExcBtn(s.getId(), all));
-//                list.add(respNodeVO);
-//            }
-//        }
-//        return list;
         return all.stream().map(s -> {
             if (s.getPid().equals(id) && s.getType() != 3) {
                 PermissionRespNodeVO respNodeVO = new PermissionRespNodeVO();
@@ -230,11 +235,107 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public List<PermissionRespNodeVO> permissionTreeList(String userId) {
-        return getTree(selectAll(), true);
+        return getTree(getPermissionsById(userId), true);
     }
 
     @Override
     public List<PermissionRespNodeVO> selectAllTree() {
         return getTree(selectAll(), false);
+    }
+
+    @Override
+    public void updatePermission(PermissionUpdateReqVO vo) {
+        //校验数据
+        SysPermission update = new SysPermission();
+        BeanUtils.copyProperties(vo, update);
+        verifyForm(update);
+        SysPermission sysPermission = sysPermissionMapper.selectByPrimaryKey(vo.getId());
+        if (sysPermission == null) {
+            log.info("传入的id在数据库中不存在");
+            throw new BusinessException(BaseResponseCode.DATA_ERROR);
+        }
+        if (!sysPermission.getPid().equals(vo.getPid())) {
+            //所属菜单发生了变化要校验该权限是否存在子集
+            List<SysPermission> childList = sysPermissionMapper.selectChild(vo.getId());
+            if (!childList.isEmpty()) {
+                throw new BusinessException(BaseResponseCode.OPERATION_MENU_PERMISSION_UPDATE);
+            }
+        }
+        update.setUpdateTime(new Date());
+        int i = sysPermissionMapper.updateByPrimaryKeySelective(update);
+        if (i != 1) {
+            throw new BusinessException(BaseResponseCode.OPERATION_ERROR);
+        }
+        //判断授权标识符是否发生了变化，若发生了变化需要标记该权限关联的用户，让其去主动刷新 token
+        if (!sysPermission.getPerms().equals(vo.getPerms())) {
+            markUser(vo.getId());
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deletedPermission(String permissionId) {
+        //判断是否有子集关联
+        List<SysPermission> childList = sysPermissionMapper.selectChild(permissionId);
+        if (!childList.isEmpty()) {
+            throw new BusinessException(BaseResponseCode.ROLE_PERMISSION_RELATION);
+        }
+        //解除相关角色和该菜单权限的关联
+        rolePermissionService.removeByPermissionId(permissionId);
+        //更新权限数据
+        SysPermission sysPermission = new SysPermission();
+        sysPermission.setId(permissionId);
+        sysPermission.setUpdateTime(new Date());
+        sysPermission.setDeleted(0);
+        int i = sysPermissionMapper.updateByPrimaryKeySelective(sysPermission);
+        if (i != 1) {
+            throw new BusinessException(BaseResponseCode.OPERATION_ERROR);
+        }
+        //标记该权限关联的用户，让其去主动刷新 token
+        markUser(permissionId);
+    }
+
+    //标记传入权限所关联的用户，让其去主动刷新 token
+    private void markUser(String permissionId) {
+        List<String> roleIds = rolePermissionService.getRoleIdsByPermissionId(permissionId);
+        if (!roleIds.isEmpty()) {
+            List<String> userIds = userRoleService.getUserIdsByRoleIds(roleIds);
+            if (!userIds.isEmpty()) {
+                userIds.forEach(uid -> {
+                    redisService.set(Constant.JWT_REFRESH_KEY+ uid, uid,
+                        tokenSettings.getAccessTokenExpireTime().toMillis(),
+                        TimeUnit.MILLISECONDS);
+                    //删除用户缓存的授权信息
+                    redisService.delete(Constant.IDENTIFY_CACHE_KEY + uid);
+                });
+            }
+        }
+    }
+
+    @Override
+    public List<String> getPermissionByUserId(String userId) {
+        List<SysPermission> permissions = getPermissionsById(userId);
+        if (permissions==null||permissions.isEmpty()) {
+            return null;
+        }
+        return permissions.stream().map(p -> {
+            if (!StringUtils.isEmpty(p.getPerms())) {
+                return p.getPerms();
+            }
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SysPermission> getPermissionsById(String userId) {
+        List<String> roleIds = userRoleService.getRoleIdsByUserId(userId);
+        if (roleIds.isEmpty()) {
+            return null;
+        }
+        List<String> permissionIds = rolePermissionService.getPermissionIdsByRoleIds(roleIds);
+        if (permissionIds.isEmpty()) {
+            return null;
+        }
+        return sysPermissionMapper.selectInfoByIds(permissionIds);
     }
 }

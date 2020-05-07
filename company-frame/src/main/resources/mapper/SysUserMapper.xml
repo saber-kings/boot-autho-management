@@ -251,6 +251,54 @@
         from sys_user
         <where>
             deleted=1
+            <if test="userId != null and userId != ''">
+                and id = #{userId}
+            </if>
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and nick_name like concat('%', #{nickName}, '%')
+            </if>
+            <if test="status != null and status != '' or status==0">
+                and `status` = #{status}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and create_time &lt;= #{endTime}
+            </if>
         </where>
+    </select>
+    <!-- @Description:    批量/删除用户-->
+    <!-- @Author:    Saber污妖王-->
+    <update id="deletedUsers" parameterType="com.yingxue.lesson.entity.SysUser">
+        update sys_user
+        <set>
+            deleted = 0,
+            <if test="sysUser.updateId != null and sysUser.updateId != ''">
+                update_id = #{sysUser.updateId},
+            </if>
+            <if test="sysUser.updateTime != null">
+                update_time = #{sysUser.updateTime},
+            </if>
+        </set>
+        where id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+    <!-- @Description:    查询指定组织的下所有用户-->
+    <!-- @Author:    Saber污妖王-->
+    <select id="selectUserInfoByDeptIds" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from sys_user
+        where dept_id in
+        <foreach collection="list" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+        and deleted=1
     </select>
 </mapper>

@@ -8,7 +8,7 @@ import java.time.Duration;
 
 /**
  * @Author: Saber污妖王
- * TODO: JWT 配置读取类
+ * TODO: JWT 配置读取工具类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/25

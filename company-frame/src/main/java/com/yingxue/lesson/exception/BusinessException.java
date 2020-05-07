@@ -5,7 +5,7 @@ import lombok.Getter;
 
 /**
  * @Author: Saber污妖王
- * TODO: 自定义异常类
+ * TODO: 自定义业务异常类
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/24

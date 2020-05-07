@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @Author: Saber污妖王
- * TODO: 类文件简单描述
+ * TODO: 视图跳转相关接口
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/26
@@ -65,5 +65,23 @@ public class IndexController {
     @ApiOperation("跳转用户管理页面")
     public String users(){
         return "users/user";
+    }
+
+    @GetMapping("/logs")
+    @ApiOperation("跳转日志管理页面")
+    public String logs(){
+        return "logs/log";
+    }
+
+    @GetMapping("/users/info")
+    @ApiOperation(value = "跳转个人用户信息编辑页面")
+    public String usersInfo(){
+        return "/users/user_edit";
+    }
+
+    @GetMapping("/users/pwd")
+    @ApiOperation(value = "跳转个人用户修改页面")
+    public String updatePwd(){
+        return "/users/user_pwd";
     }
 }

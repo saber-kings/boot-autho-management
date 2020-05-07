@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: Saber污妖王
- * TODO: 类文件简单描述
+ * TODO: 自定义用户凭证验证器
  * @UpdateUser: luanz
  * @Project: company-frame
  * @Date: 2020/3/26
@@ -30,42 +30,31 @@ public class CustomHashedCredentialsMatcher extends HashedCredentialsMatcher {
         CustomUsernamePasswordToken customUsernamePasswordToken = (CustomUsernamePasswordToken) token;
         String accessToken = (String) customUsernamePasswordToken.getPrincipal();
         String userId = JwtTokenUtil.getUserId(accessToken);
-        /**
-         * 判断用户是否被锁定
-         */
+        // 判断用户是否被锁定
         if (redisService.hasKey(Constant.ACCOUNT_LOCK_KEY + userId)) {
             throw new BusinessException(BaseResponseCode.ACCOUNT_LOCK);
         }
-        /**
-         * 判断用户是否被删除
-         */
+        // 判断用户是否被删除
         if (redisService.hasKey(Constant.DELETED_USER_KEY + userId)) {
             throw new BusinessException(BaseResponseCode.ACCOUNT_HAS_DELETED_ERROR);
         }
-        /**
-         * 判断 token 是否主动登出
-         */
-        if (redisService.hasKey(Constant.JWT_REFRESH_TOKEN_BLACKLIST + accessToken)) {
+        // 判断 token 是否主动登出
+        if (redisService.hasKey(Constant.JWT_ACCESS_TOKEN_BLACKLIST + accessToken)) {
             throw new BusinessException(BaseResponseCode.TOKEN_ERROR);
         }
-        /**
-         * 判断token是否通过校验
-         */
+        // 判断token是否通过校验
         if (!JwtTokenUtil.validateToken(accessToken)) {
             throw new BusinessException(BaseResponseCode.TOKEN_PAST_DUE_INVALID);
         }
-        /**
-         * 判断这个登录用户是否要主动去刷新
-         * 通过剩余的过期时间比较,
-         * 如果token的剩余过期时间大于标记key的剩余过期时间
-         * 就说明这个token是在这个标记key之后生成的
-         * 这样就要判断它是否刷新过了/或者是否是新生成的token
-         */
-        if (redisService.hasKey(Constant.JWT_REFRESH_KEY + userId) && redisService.getExpire(Constant.JWT_REFRESH_KEY + userId, TimeUnit.MILLISECONDS) > JwtTokenUtil.getRemainingTime(accessToken)) {
-            /**
-             * 是否存在刷新的标识
+
+        // 判断用户是否被标记了
+        if (redisService.hasKey(Constant.JWT_REFRESH_KEY + userId)) {
+            // 判断用户是否已经刷新过 token 了
+            /*
+             * 通过剩余的过期时间比较如 果 token 的剩余过期时间大与标记 key 的剩余过期时间
+             * 就说明这个 token 是在这个标记 key 之后生成的
              */
-            if (!redisService.hasKey(Constant.JWT_REFRESH_IDENTIFICATION + accessToken)) {
+            if (redisService.getExpire(Constant.JWT_REFRESH_KEY + userId, TimeUnit.MILLISECONDS) > JwtTokenUtil.getRemainingTime(accessToken)){
                 throw new BusinessException(BaseResponseCode.TOKEN_PAST_DUE_INVALID);
             }
         }
