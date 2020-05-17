@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.github.pagehelper.PageHelper;
 import com.yingxue.lesson.constants.Constant;
+import com.yingxue.lesson.entity.SysData;
 import com.yingxue.lesson.entity.SysDept;
 import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.exception.BusinessException;
@@ -28,6 +29,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @Author: Saber污妖王
@@ -62,6 +64,10 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private PermissionService permissionService;
+
+
+    @Resource
+    private DataService dataService;
 
     @Override
     public LoginRespVO login(LoginReqVO vo) {
@@ -321,5 +327,18 @@ public class UserServiceImpl implements UserService {
         redisService.set(Constant.JWT_REFRESH_TOKEN_BLACKLIST + refreshToken, userId, JwtTokenUtil.getRemainingTime(refreshToken), TimeUnit.MILLISECONDS);
         //删除用户缓存的授权信息
         redisService.delete(Constant.IDENTIFY_CACHE_KEY + userId);
+    }
+
+    @Override
+    public List<SysData> getItems() {
+        List<SysData> tables = dataService.selectTableOrField(0);
+
+        List<List<SysData>> list = tables.stream().map(t -> {
+            if (t.getId()==1) {
+                return dataService.selectTableOrField(t.getId());
+            }
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+        return list.get(0);
     }
 }

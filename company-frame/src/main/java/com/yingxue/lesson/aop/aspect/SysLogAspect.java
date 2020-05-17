@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.UUID;
@@ -74,7 +75,7 @@ public class SysLogAspect {
      * 把日志保存
      *
      * @param joinPoint 切入点
-     * @param time 耗时
+     * @param time      耗时
      */
     private void saveSysLog(ProceedingJoinPoint joinPoint, long time) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -96,11 +97,17 @@ public class SysLogAspect {
         try {
             //请求的参数
             Object[] args = joinPoint.getArgs();
-            String params = null;
+            // 如果参数类型是请求和响应的http，则不需要拼接【这两个参数，使用 JSON.toJSONString() 转换会抛异常】
+            StringBuilder params = new StringBuilder(0);
             if (args.length != 0) {
-                params = JSON.toJSONString(args);
+                for (Object arg : args) {
+                    if (arg instanceof HttpServletRequest || arg instanceof HttpServletResponse) {
+                        continue;
+                    }
+                    params.append(arg == null ? "" : JSON.toJSONString(arg));
+                }
             }
-            sysLog.setParams(params);
+            sysLog.setParams(params.toString());
         } catch (Exception e) {
             log.error("Exception,{}", e.getLocalizedMessage());
         }

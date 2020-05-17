@@ -1,5 +1,6 @@
 package com.yingxue.lesson.service;
 
+import com.yingxue.lesson.entity.SysData;
 import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.vo.req.*;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
@@ -68,4 +69,10 @@ public interface UserService {
     void userUpdateDetailInfo(UserUpdateDetailInfoReqVO vo, String userId);
 
     void userUpdatePwd(UserUpdatePwdReqVO vo, String accessToken, String refreshToken);
+
+    /**
+     * 查询用户表字段列表
+     * @return 字段列表
+     */
+    List<SysData> getItems();
 }

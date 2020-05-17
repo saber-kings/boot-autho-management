@@ -2,6 +2,7 @@ package com.yingxue.lesson.controller;
 
 import com.yingxue.lesson.aop.annotation.MyLog;
 import com.yingxue.lesson.constants.Constant;
+import com.yingxue.lesson.entity.SysData;
 import com.yingxue.lesson.entity.SysUser;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.service.UserService;
@@ -157,5 +158,13 @@ public class UserController {
         String refreshToken = request.getHeader(Constant.REFRESH_TOKEN);
         userService.userUpdatePwd(vo, accessToken, refreshToken);
         return DataResult.success();
+    }
+
+    @GetMapping("/user/datas")
+//    @RequiresPermissions("sys:user:list")
+    @ApiOperation(value = "查询用户表数据列接口")
+    public DataResult<List<SysData>> getItems() {
+        List<SysData> items = userService.getItems();
+        return DataResult.success(items);
     }
 }

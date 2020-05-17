@@ -15,7 +15,7 @@ class CompanyFrameApplicationTests {
 
     @Test
     void contextLoads() {
-        Set<String> keys = redisService.keys(Constant.REFRESH_TOKEN+"*");
+        Set<String> keys = redisService.keys("*");
         for (String key : keys) {
             System.out.println(key);
         }
