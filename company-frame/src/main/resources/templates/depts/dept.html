@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xml:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,65 +7,71 @@
     <link rel="stylesheet" href="/css/custom.form.css">
 </head>
 <body>
-<div class="panel panel-default operation_dept" hidden>
-    <div class="panel-heading title"></div>
-    <div class="layui-card-body">
-        <form class="layui-form layui-form-pane" action="" lay-filter="deptInfo" style="width:700px;margin-top: 10px">
-            <input name="id" hidden/>
-            <input name="pid" hidden/>
-            <div class="layui-form-item">
-                <label class="layui-form-label">部门名称</label>
-                <div class="layui-input-block">
-                    <input type="name" name="name" placeholder="请输入组织机构名称" autocomplete="off"
-                           class="layui-input">
-                </div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="panel panel-default operation_dept" hidden>
+            <div class="panel-heading title"></div>
+            <div class="layui-card-body">
+                <form class="layui-form layui-form-pane" action="" lay-filter="deptInfo" style="width:700px;margin-top: 10px">
+                    <input name="id" lay-reqtext="部门id不能为空" hidden/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">部门名称</label>
+                        <div class="layui-input-block">
+                            <input type="name" name="name" placeholder="请输入组织机构名称"
+                                   lay-verify="required" lay-reqtext="部门名称不能为空"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <input name="pid" lay-verify="required" lay-reqtext="请选择所属部门" hidden/>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label ">所属部门</div>
+                        <div class="layui-input-block">
+                            <input type="pidName" name="pidName" placeholder="请选择所属部门" autocomplete="off"
+                                   lay-verify="required" lay-reqtext="请选择所属部门"
+                                   class="layui-input" readonly="readonly" style="background:#eeeeee!important">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">部门经理名称</label>
+                        <div class="layui-input-block">
+                            <input type="managerName" name="managerName" placeholder="请输入部门经理名称"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">部门经理手机号</div>
+                        <div class="layui-input-block">
+                            <input type="phone" name="phone" placeholder="请输入部门经理手机号" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="status" lay-skin="switch" lay-filter="switch" lay-text="启用|禁用" checked>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit="" lay-filter="submit">保存
+                            </button>
+                            <button class="layui-btn layui-btn-primary" id="btn_cancel">返回</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="layui-form-item">
-                <div class="layui-form-label ">所属部门</div>
-                <div class="layui-input-block">
-                    <input type="pidName" name="pidName" placeholder="请选择所属部门" autocomplete="off"
-                           class="layui-input" readonly="readonly" style="background:#eeeeee!important">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label ">部门经理名称</label>
-                <div class="layui-input-block">
-                    <input type="managerName" name="managerName" placeholder="请输入部门经理名称"
-                           autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-form-label">部门经理手机号</div>
-                <div class="layui-input-block">
-                    <input type="phone" name="phone" placeholder="请输入部门经理手机号" autocomplete="off"
-                           class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">状态</label>
-                <div class="layui-input-block">
-                    <input type="checkbox" name="status" lay-skin="switch" lay-filter="switch" lay-text="启用|禁用" checked>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="submit">保存
-                    </button>
-                    <button class="layui-btn layui-btn-primary" id="btn_cancel">返回</button>
-                </div>
-            </div>
-        </form>
+        </div>
+        <div id="deptTree" style="display: none"></div>
+        <div class="dept-table">
+            <table class="layui-table" id="deptTable" lay-filter="deptTable"></table>
+        </div>
     </div>
-</div>
-<div id="deptTree" style="display: none"></div>
-<div class="dept-table">
-    <table class="layui-table" id="deptTable" lay-filter="deptTable"></table>
 </div>
 </body>
 <script type="text/html" id="toolbar">
-    <div class="layui-btn-group">
-        <button type="button" class="layui-btn" lay-event="addDept" shiro:hasPermission="sys:dept:add">
-            <i class="layui-icon">&#xe608;</i> 添加
+    <div class="layui-btn-container">
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="addDept" shiro:hasPermission="sys:dept:add">
+            <i class="layui-icon">&#xe608;</i> 新增部门
         </button>
     </div>
 </script>
@@ -123,7 +129,7 @@
                         {
                             field: 'pidName', title: '上级部门名称', templet: function (item) {
                                 if (item.pidName === null || item.pidName === undefined) {
-                                    return "最顶级部门";
+                                    return "默认顶级部门";
                                 } else {
                                     return item.pidName;
                                 }
@@ -190,7 +196,9 @@
                     //显示编辑窗口
                     $(".operation_dept").show();
                     $(".title").html("新增部门");
-                    $(".operation_dept input[name=id]").val("");
+                    var $deptId = $(".operation_dept input[name=id]");
+                    $deptId.val("");
+                    $deptId.removeAttr("lay-verify");
                     $(".operation_dept input[name=pid]").val("");
                     $(".operation_dept input[name=name]").val("");
                     $(".operation_dept input[name=pidName]").val("");
@@ -286,10 +294,16 @@
                     //显示编辑窗口
                     $(".operation_dept").show();
                     $(".title").html("编辑部门");
-                    $(".operation_dept input[name=id]").val(data.id);
+                    var $deptId = $(".operation_dept input[name=id]");
+                    $deptId.val(data.id);
+                    $deptId.attr("lay-verify", "required");
                     $(".operation_dept input[name=pid]").val(data.pid);
                     $(".operation_dept input[name=name]").val(data.name);
-                    $(".operation_dept input[name=pidName]").val(data.pidName);
+                    if (data.pidName == null || data.pidName === "") {
+                        $(".operation_dept input[name=pidName]").val("默认顶级部门");
+                    } else {
+                        $(".operation_dept input[name=pidName]").val(data.pidName);
+                    }
                     $(".operation_dept input[name=managerName]").val(data.managerName);
                     $(".operation_dept input[name=phone]").val(data.phone);
                     var x = document.getElementsByClassName("layui-unselect layui-form-switch");

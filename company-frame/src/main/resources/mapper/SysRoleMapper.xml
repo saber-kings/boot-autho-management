@@ -135,7 +135,7 @@
             <if test="endTime != null and endTime != ''">
                 and create_time &lt;= #{endTime}
             </if>
-            <if test="status != null and status != '' or status==0">
+            <if test="status != null and status != '' or status == 0">
                 and `status` = #{status}
             </if>
         </where>

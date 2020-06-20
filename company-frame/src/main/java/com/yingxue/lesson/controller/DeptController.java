@@ -18,13 +18,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 部门模块相关接口
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/4/21
- * @Package: com.yingxue.lesson.controller
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/4/21
+ * @package com.yingxue.lesson.controller
  */
 @RestController
 @RequestMapping("/api")

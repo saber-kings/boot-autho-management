@@ -13,13 +13,13 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: Shiro 的 Redis 缓存类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/26
- * @Package: com.yingxue.lesson.shiro
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/26
+ * @package com.yingxue.lesson.shiro
  */
 @Slf4j
 public class RedisCache<K, V> implements Cache<K, V> {
@@ -45,6 +45,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
                 return null;
             }
             SimpleAuthorizationInfo simpleAuthenticationInfo = JSON.parseObject(rawValue.toString(), SimpleAuthorizationInfo.class);
+
             return ((V) simpleAuthenticationInfo);
         } catch (Exception e) {
             throw new CacheException(e);

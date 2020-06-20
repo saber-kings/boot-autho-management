@@ -5,7 +5,9 @@ import com.yingxue.lesson.entity.SysPermission;
 import com.yingxue.lesson.service.PermissionService;
 import com.yingxue.lesson.utils.DataResult;
 import com.yingxue.lesson.vo.req.PermissionAddReqVO;
+import com.yingxue.lesson.vo.req.PermissionPageReqVO;
 import com.yingxue.lesson.vo.req.PermissionUpdateReqVO;
+import com.yingxue.lesson.vo.resp.PageRespVO;
 import com.yingxue.lesson.vo.resp.PermissionRespNodeVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,13 +20,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 菜单权限模块相关接口
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/31
- * @Package: com.yingxue.lesson.controller
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/31
+ * @package com.yingxue.lesson.controller
  */
 @RestController
 @RequestMapping("/api")
@@ -39,6 +41,14 @@ public class PermissionController {
     @MyLog(title = "组织管理-菜单权限管理", action = "获取所有的菜单权限数据接口")
     public DataResult<List<SysPermission>> getAllPermission() {
         return DataResult.success(permissionService.selectAll());
+    }
+
+    @PostMapping("/permissions")
+    @ApiOperation(value = "分页查询菜单权限接口")
+    @RequiresPermissions("sys:permission:list")
+    @MyLog(title = "组织管理-菜单权限管理", action = "分页查询菜单权限接口")
+    public DataResult<PageRespVO<SysPermission>> pageInfo(@RequestBody PermissionPageReqVO vo) {
+        return DataResult.success(permissionService.pageInfo(vo));
     }
 
     @GetMapping("/permission/tree")

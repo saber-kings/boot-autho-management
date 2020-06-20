@@ -1,5 +1,10 @@
 server:
   port: 8080
+  #解决文件过大 全局异常监控到后但是前端没有响应
+  tomcat:
+    max-swallow-size: -1
+    # Tomcat 连接超时时间，超时主动断开客户端连接
+    # connection-timeout: PT60S
 spring:
   # 数据库配置
   datasource:
@@ -44,17 +49,7 @@ spring:
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    password: admin123
-    lettuce:
-      pool:
-        # 连接池最大连接数（使用负值表示没有限制）
-        max-active: 100
-        # 连接池最大阻塞等待时间（使用负值表示没有限制）10秒
-        max-wait: PT10S
-        # 连接池中的最大空闲连接
-        max-idle: 30
-        # 连接池中的最小空闲连接
-        min-idle: 1
+    password:
     # 连接超时时间（10秒）
     #"PT20.345S" -- parses as "20.345 seconds"
     #"PT15M"     -- parses as "15 minutes" (where a minute is 60 seconds)
@@ -64,7 +59,21 @@ spring:
     #"PT-6H3M"    -- parses as "-6 hours and +3 minutes"
     #"-PT6H3M"    -- parses as "-6 hours and -3 minutes"
     #"-PT-6H+3M"  -- parses as "+6 hours and -3 minutes"
-    timeout: PT10S
+    timeout: PT5M
+    # lettuce 客户端
+    lettuce:
+      # 接池配置
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）默认 8
+        max-active: 100
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）10秒 默认 -1
+        max-wait: PT10S
+        # 连接池中的最大空闲连接 默认 8
+        max-idle: 30
+        # 连接池中的最小空闲连接 默认 0
+        min-idle: 1
+        # 空闲连接回收的时间间隔
+        time-between-eviction-runs: PT5M
 
 # logging配置
 logging:
@@ -85,4 +94,13 @@ jwt:
   issuer: yingxue.com
 
 # 跨域允许的地址，如果有端口号也必须加上如：http://127.0.0.1:8081 , 就算指定80也不能放行 8081
-wedOrigin.name: /*
+cross.origin: /*
+
+# 配置文件存储磁盘路径
+file:
+  # win:文件存储路径
+  path: F:/upload/image/
+  #虚拟路径
+  static-path: /upload/image/**
+  #文件路径地址
+  base-url: http://127.0.0.1:8080/upload/image/

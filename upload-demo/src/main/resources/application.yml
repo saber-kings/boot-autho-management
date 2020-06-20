@@ -1,0 +1,12 @@
+spring:
+  servlet:
+    multipart:
+      # 单文件最大支持文件大小
+      max-file-size: 10MB
+      # 文件总大小最大支持文件大小
+      max-request-size: 10MB
+  # win:文件存储路径
+file:
+  path: F:/upload/image/
+  # linux:文件存储路径
+#  path: /opt/upload/image/

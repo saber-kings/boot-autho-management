@@ -10,6 +10,14 @@ spring:
       poll-interval: 3s
       quiet-period: 2999ms
 
+  # 配置文件上传大小限制
+  servlet:
+    multipart:
+      # 单文件最大支持文件大小
+      maxFileSize: 100MB
+      # 文件总大小最大支持文件大小
+      maxRequestSize: 100MB
+
   # thymeleaf
   thymeleaf:
     # 前缀 默认读取classpath:/templates/
@@ -35,3 +43,9 @@ swagger2:
 pagehelper:
   helperDialect: mysql
   reasonable: true
+
+# 指定属性拷贝方式
+# 1：Cglib 的 BeanCopier，2：我的，3：带类型转换器的，其他：Spring 的 BeanUtils
+bean:
+  copy:
+    type: 1

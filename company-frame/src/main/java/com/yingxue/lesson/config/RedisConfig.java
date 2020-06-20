@@ -8,13 +8,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: Redis 配置类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/24
- * @Package: com.yingxue.lesson.config
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/24
+ * @package com.yingxue.lesson.config
  */
 @Configuration
 public class RedisConfig {

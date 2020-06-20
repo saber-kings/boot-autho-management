@@ -3,13 +3,13 @@ package com.yingxue.lesson.utils;
 import java.util.UUID;
 
 /**
- * @Author: 小霍
+ * @author 小霍
  * TODO: 密码相关工具类
- * @UpdateUser: Saber污妖王
- * @Project: company-frame
- * @Date: 2020/3/25
- * @Package: com.yingxue.lesson.utils
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/25
+ * @package com.yingxue.lesson.utils
  */
 public class PasswordUtils {
 
@@ -29,7 +29,7 @@ public class PasswordUtils {
      * 明文密码加密
      *
      * @param rawPass 明文
-     * @param salt 盐
+     * @param salt    盐
      * @return 密文
      */
     public static String encode(String rawPass, String salt) {

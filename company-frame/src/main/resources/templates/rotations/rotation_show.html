@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <style type="text/css">
+        div{
+            position:relative;
+            overflow:hidden;
+        }
+        div img{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: block;
+            min-width: 100%;
+            min-height: 100%;
+            transform:translate(-50%,-50%);
+        }
+        .layui-fluid {
+            padding: 15px !important;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-carousel" id="rotationView">
+        <div carousel-item="" id="carousel-item"></div>
+    </div>
+</div>
+</body>
+<script src="/layui/layui.js"></script>
+<script src="/js/core.util.js"></script>
+<script>
+    layui.use(['jquery', 'carousel', 'layer'], function () {
+        var carousel = layui.carousel;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        CoreUtil.sendAjax("/api/rotations", null, function (res) {
+            var data = res.data;
+            var carouselHtml = "";
+            if (data != null && data.length > 0) {
+                $.each(data, function (index, item) {
+                    carouselHtml += '</div>';
+                    carouselHtml += '<a href="' + item.url + '" target="_blank">';
+                    carouselHtml += '<img src="' + item.fileUrl + '" alt="轮播图"/>';
+                    carouselHtml += '</a></div>'
+                });
+                $("#carousel-item").html(carouselHtml);
+                //图片轮播
+                carousel.render({
+                    elem: '#rotationView',
+                    width: '100%',
+                    height: '550px',
+                    interval: 5000
+                });
+            }
+        }, "GET", false);
+    });
+</script>
+</html>

@@ -7,6 +7,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 角色实体
+ *
+ * @author Saber污妖王
+ */
 @Data
 public class SysRole implements Serializable {
     private String id;
@@ -26,5 +31,4 @@ public class SysRole implements Serializable {
     private List<PermissionRespNodeVO> permissionTree;
 
     private static final long serialVersionUID = 1L;
-
 }

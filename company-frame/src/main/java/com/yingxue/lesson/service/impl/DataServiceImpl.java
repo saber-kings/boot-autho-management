@@ -7,12 +7,12 @@ import com.yingxue.lesson.exception.BusinessException;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.mapper.SysDataMapper;
 import com.yingxue.lesson.service.DataService;
+import com.yingxue.lesson.utils.BeanUtils;
 import com.yingxue.lesson.utils.PageUtil;
 import com.yingxue.lesson.vo.req.DataAddReqVO;
 import com.yingxue.lesson.vo.req.DataPageReqVO;
 import com.yingxue.lesson.vo.req.DataUpdateReqVO;
 import com.yingxue.lesson.vo.resp.PageRespVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +20,13 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
- * TODO: 类文件简单描述
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/5/5
- * @Package: com.yingxue.lesson.service.impl
- * @Version: 0.0.1
+ * @author Saber污妖王
+ * TODO: 数据字典相关业务层实现类
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/5/5
+ * @package com.yingxue.lesson.service.impl
  */
 @Service
 public class DataServiceImpl implements DataService {

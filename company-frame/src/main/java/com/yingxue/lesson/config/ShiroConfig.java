@@ -11,6 +11,7 @@ import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSource
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +21,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: Shiro 配置类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/26
- * @Package: com.yingxue.lesson.config
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/26
+ * @package com.yingxue.lesson.config
  */
 @Configuration
 public class ShiroConfig {
@@ -71,6 +72,9 @@ public class ShiroConfig {
         return securityManager;
     }
 
+    @Value("${file.static-path}")
+    private String fileStaticPath;
+
     /**
      * shiro过滤器，配置拦截哪些请求
      *
@@ -89,6 +93,8 @@ public class ShiroConfig {
         Map<String, String> map = new LinkedHashMap<>();
         //配置不会被拦截的链接 顺序判断
         map.put("/api/user/login", "anon");
+        map.put(fileStaticPath, "anon");
+        //后端下载接口设置开放
         map.put("/index/**", "anon");
         map.put("/images/**", "anon");
         map.put("/js/**", "anon");

@@ -5,6 +5,11 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 部门实体
+ *
+ * @author Saber污妖王
+ */
 @Data
 public class SysDept implements Serializable {
     private String id;
@@ -34,5 +39,4 @@ public class SysDept implements Serializable {
     private Integer deleted;
 
     private static final long serialVersionUID = 1L;
-
 }

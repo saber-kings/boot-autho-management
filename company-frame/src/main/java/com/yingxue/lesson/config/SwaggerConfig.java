@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: Swagger 配置类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/24
- * @Package: com.yingxue.lesson.config
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/24
+ * @package com.yingxue.lesson.config
  */
 @Configuration
 @EnableSwagger2
@@ -72,6 +72,8 @@ public class SwaggerConfig {
                 new Tag("组织管理-部门管理", "部门管理相关接口"),
                 new Tag("系统管理-日志管理", "日志管理相关接口"),
                 new Tag("系统管理-字典管理", "数据字典管理相关接口"),
+                new Tag("文件系统-我的文件", "文件操作相关接口"),
+                new Tag("文件系统-轮播图管理", "轮播图功能相关接口"),
         };
     }
 

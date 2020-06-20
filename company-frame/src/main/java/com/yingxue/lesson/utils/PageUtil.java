@@ -6,13 +6,13 @@ import com.yingxue.lesson.vo.resp.PageRespVO;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 分页相关的工具类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/25
- * @Package: com.yingxue.lesson.utils
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/25
+ * @package com.yingxue.lesson.utils
  */
 public class PageUtil {
     private PageUtil() {

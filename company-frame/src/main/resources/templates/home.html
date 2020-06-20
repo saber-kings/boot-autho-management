@@ -6,44 +6,157 @@
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <title>首页</title>
     <style>
+        html {
+            background-color: #f2f2f2;
+        }
+
+        .layui-tab {
+            margin: 0;
+            background-color: #fff;
+        }
+
+        .layui-tab-title li {
+            max-width: 160px;
+            overflow: hidden;
+            border: 1px solid #f2f2f2;
+            border-left-width: 0;
+            vertical-align: top;
+        }
+
+        .layui-tab-title li:hover {
+            background-color: #009688;
+            border-bottom-width: 0;
+            color: #eee;
+        }
+
         .layui-tab-title .layui-this {
             background-color: #009688;
+            border-bottom-width: 0;
             color: #eee;
+        }
+
+        .layui-tab-title .layui-this:after {
+            border-style: none;
         }
 
         .first-tab i.layui-tab-close {
             display: none !important;
         }
+
+        .my-text-align-center {
+            text-align: center;
+        }
+
+        .hide-icon {
+            text-align: right;
+            padding: 10px 10px 10px 0;
+            background: rgba(0, 0, 0, .2);
+        }
+
+        .hide-icon i {
+            cursor: pointer;
+            padding-right: 2px;
+        }
+
+        .span-hide-icon {
+            height: 100%;
+            line-height: 60px;
+            position: relative;
+            right: 80px;
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, .2);
+        }
+
+        .span-hide-icon i {
+            color: white;
+            cursor: pointer;
+        }
+
+        .my-nav-icon {
+            padding-right: 10px;
+        }
+
+        .layui-body {
+            overflow-y: hidden;
+        }
+
+        .layui-body .layui-tab-content {
+            padding: 0;
+        }
+
+        .my-admin-iframe {
+            position: absolute;
+            border: medium none;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 40px;
+            right: 0;
+            bottom: 0;
+        }
+
+        .layui-layout-admin .layui-body {
+            position: fixed;
+            top: 60px;
+            bottom: 0;
+        }
+
+        .layui-nav.layui-layout-right .layui-nav-item.user-info-menu .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this {
+            background: 0 0;
+        }
+
+        .layui-nav.layui-layout-right .layui-nav-item.user-info-menu .layui-nav-child dd.layui-this a, .layui-nav-child dd.layui-this {
+            background: 0 0;
+            color: #333;
+        }
+
     </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">迎学后台管理系统</div>
+        <div class="layui-logo">
+            <span id="span-title">后台权限管理系统</span>
+            <span class="span-hide-icon" id="media-hide" onclick="mediaHide()" hidden>
+                <i class="layui-icon">&#xe66b;</i>
+            </span>
+        </div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item"><a id="deptName" href="javascript:void(0);"></a></li>
             <li class="layui-nav-item">
+                <a id="deptName" href="javascript:void(0);"></a>
+            </li>
+            <li class="layui-nav-item user-info-menu">
                 <a href="javascript:void(0);" style="margin-right: 15px">
                     <i class="layui-icon layui-icon-username"
                        style="font-size: 30px; color:#1E9FFF;"></i>
                     <span id="nickName"></span>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd>
-                        <a href="javascript:void(0);" data-id="userProper" data-title="基本资料" data-url="/index/users/info" class="menuNvaBar">基本资料</a>
+                    <dd class="my-text-align-center">
+                        <a href="javascript:void(0);" data-id="userProper" data-title="基本资料"
+                           data-url="/index/users/info" class="menuNvaBar">基本资料</a>
                     </dd>
-                    <dd>
-                        <a href="javascript:void(0);" data-id="userSafe" data-title="安全设置" data-url="/index/users/pwd" class="menuNvaBar">更换密码</a>
+                    <dd class="my-text-align-center">
+                        <a href="javascript:void(0);" data-id="userSafe" data-title="安全设置" data-url="/index/users/pwd"
+                           class="menuNvaBar">更换密码</a>
+                    </dd>
+                    <hr>
+                    <dd class="my-text-align-center">
+                        <a href="javascript:void(0);" id="logout">退出</a>
                     </dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="javascript:void(0);" id="logout">退出</a></li>
         </ul>
     </div>
     <!-- 左侧菜单-->
-    <div id="mainmenu" class="layui-side layui-bg-black">
+    <div id="mainMenu" class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
+            <div class="hide-icon" id="icon-hide-item">
+                <span id="icon-hide-text" style="padding-right: 20px;">点击右侧图标可隐藏</span>
+                <i class="layui-icon" onclick="iconHide()" id="hide">&#xe668;</i>
+            </div>
             <div class="navBar layui-side-scroll" id="navBarId"></div>
         </div>
     </div>
@@ -55,7 +168,8 @@
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <iframe th:src="@{/index/main}" frameborder="0" name="content" width="100%"
+                    <iframe th:src="@{/index/main}" class="my-admin-iframe"
+                            name="content"
                             id="home"></iframe>
                 </div>
             </div>
@@ -65,17 +179,65 @@
 </body>
 <script src="/layui/layui.js"></script>
 <script src="/js/core.util.js"></script>
+<script src="/js/jquery.min.js"></script>
 <script>
     layui.use(['jquery', 'element', 'layer'], function () {
         var $ = layui.jquery;
         var element = layui.element;
         var layer = layui.layer;
         frameWH();
+        mainMenuAuto();
 
         /*设置主体内容层高度*/
         function frameWH() {
-            var h = $(window).height() - 41 - 10 - 35 - 10 - 44 - 10;
+            var h = $(window).height() - 60 - 40;
             $("iframe").css("height", h + "px");
+        }
+
+        var menuIsHide = false;
+
+        window.onresize = function (ev) {
+            frameWH();
+            // 如果浏览器宽度小于992px就隐藏侧边栏，否则就展示
+            mainMenuAuto();
+        }
+
+        function mainMenuAuto() {
+            if ($(document.body).width() <= 992) {
+                mainMenHide(function () {
+                    setTimeout(function () {
+                        $("#mainMenu").hide();
+                        $("#media-hide").show();
+                        $("#span-title").hide();
+                        $("#icon-hide-item").hide();
+                    }, 160);
+                    $('.layui-body').animate({left: '0'});
+                })
+            } else {
+                mainMenShow(function () {
+                    setTimeout(function () {
+                        $("#mainMenu").show();
+                        $("#media-hide").hide();
+                        $("#span-title").show();
+                        $("#icon-hide-item").show();
+                    }, 100);
+                    $('.layui-body').animate({left: '200px'});
+                })
+            }
+        }
+
+        function mainMenHide(callback) {
+            if (!menuIsHide) {
+                menuIsHide = true;
+                callback();
+            }
+        }
+
+        function mainMenShow(callback) {
+            if (menuIsHide) {
+                menuIsHide = false;
+                callback();
+            }
         }
 
         //递归获取导航栏无限层级
@@ -83,23 +245,23 @@
             ulHtml += '<dl class="layui-nav-child">';
             $.each(item, function (index, child) {
                 if (child.children != null && child.children.length > 0) {
-                    ulHtml += '<a>' + child.title + '</a>';
+                    ulHtml += '<a href="javascript:void(0);"><i class="layui-icon my-nav-icon ' + child.code + '"></i>' + '<cite>' + child.title + '</cite></a>';
                     ulHtml += getChild(child.children, "");
                 } else {
-                    ulHtml += '<dd><a href="javascript:void(0);" data-url="' + child.url + '" data-title="' + child.title + '" data-id="' + child.id + '" class="menuNvaBar">';
+                    ulHtml += '<dd><a style="padding-left: 45px;" href="javascript:void(0);" data-url="' + child.url + '" data-title="' + child.title + '" data-id="' + child.id + '" class="menuNvaBar">';
                     ulHtml += '<cite>' + child.title + '</cite></a></dd>';
                 }
 
             });
-            ulHtml += "</dl>"
+            ulHtml += "</dl>";
             return ulHtml;
         };
         CoreUtil.sendAjax("/api/home", null, function (res) {
             $("#deptName").html("所属机构:" + res.data.userInfoVO.deptName);
-            $("#nickName").html(res.data.userInfoVO.username);
+            $("#nickName").html(res.data.userInfoVO.nickName);
             var data = res.data.menus;
             if (data !== "" && data.length > 0) {
-                var ulHtml = '<ul class="layui-nav layui-nav-tree layui-left-nav">';
+                var ulHtml = '<ul class="layui-nav layui-nav-tree layui-left-nav" onclick="ulHide()">';
                 if (data.length > 0) {
 
                     $.each(data, function (index, item) {
@@ -108,17 +270,17 @@
                         } else {
                             ulHtml += '<li class="layui-nav-item">';
                         }
-                        ulHtml += '<a href="javascript:void(0);">';
+                        ulHtml += '<a href="javascript:void(0);"><i class="layui-icon my-nav-icon ' + item.code + '"></i>';
                         ulHtml += '<cite>' + item.title + '</cite>';
                         ulHtml += '</a>';
                         if (item.children != null && item.children.length > 0) {
                             ulHtml += '<dl class="layui-nav-child">';
                             $.each(item.children, function (index, child) {
                                 if (child.children != null && child.children.length > 0) {
-                                    ulHtml += '<a>' + child.title + '</a>';
+                                    ulHtml += '<a href="javascript:void(0);"><i class="layui-icon my-nav-icon ' + child.code + '"></i>' + '<cite>' + child.title + '</cite></a>'
                                     ulHtml += getChild(child.children, "");
                                 } else {
-                                    ulHtml += '<dd><a href="javascript:void(0);" data-url="' + child.url + '" data-title="' + child.title + '" data-id="' + child.id + '" class="menuNvaBar">';
+                                    ulHtml += '<dd><a style="padding-left: 45px;" href="javascript:void(0);" data-url="' + child.url + '" data-title="' + child.title + '" data-id="' + child.id + '" class="menuNvaBar">';
                                     ulHtml += '<cite>' + child.title + '</cite></a></dd>';
                                 }
 
@@ -159,23 +321,28 @@
         });
         //封装触发事件
         var active = {
+            //添加标签页
             tabAdd: function (url, id, title) {
                 layer.msg(title);
                 if (url !== "" && url != null) {
+                    //向上方导航栏添加选项卡
                     element.tabAdd('tab', {
                         title: title,
-                        content: '<iframe data-frameid="' + id + '" frameborder="0" name="content" width="100%" src="' + url + '"></iframe>',
+                        content: '<iframe data-frameid="' + id + '" name="content" class="my-admin-iframe" src="' + url + '"></iframe>',
                         id: id
                     })
                 }
-                frameWH();//计算框架高度
+                //计算框架高度
+                frameWH();
             },
+            //切换标签页
             tabChange: function (id) {
                 //切换到指定Tab项
                 element.tabChange('tab', id); //切换到：用户管理
                 var $iframe = $("iframe[data-frameid='" + id + "']");
                 $iframe.attr("src", $iframe.attr("src")); //切换后刷新框架
             },
+            //删除标签页
             tabDelete: function (id) {
                 element.tabDelete("tab", id);//删除
             }
@@ -185,7 +352,7 @@
         $("#logout").click(function () {
             logoutDialog();
         });
-        //删除前确认对话框
+        //退出前确认对话框
         var logoutDialog = function () {
             layer.open({
                 content: '确定要退出登录么？',
@@ -199,5 +366,50 @@
         };
 
     });
+    var isShow = 1;
+
+    function iconHide() {
+        if (isShow === 1)
+            hideSide();
+        else
+            showSide();
+        isShow *= -1;
+    }
+
+    function mediaHide() {
+        if (isShow === 1) {
+            $("#mainMenu").show();
+            $('#media-hide i').html("&#xe668;");
+        } else {
+            $("#mainMenu").hide();
+            $('#media-hide i').html("&#xe66b;");
+        }
+        isShow *= -1;
+    }
+
+    function hideSide() {
+        $('.layui-side span').hide();
+        $('.layui-side').animate({width: '55px'});
+        $('.layui-side-scroll').animate({width: '65px'});
+        $('ul.layui-nav.layui-nav-tree li').removeClass("layui-nav-itemed");
+        $('.layui-body').animate({left: '60px'});
+        $('.my-nav-icon').css({paddingRight: '20px'});
+        document.getElementById('hide').innerHTML = "&#xe66b;";
+    }
+
+    function showSide() {
+        $('.layui-side span').show();
+        $('.layui-side').animate({width: '200px'});
+        $('.layui-side-scroll').animate({width: '220px'});
+        $('.layui-body').animate({left: '200px'});
+        $('.my-nav-icon').css({paddingRight: '10px'});
+        document.getElementById('hide').innerHTML = "&#xe668;";
+    }
+
+    function ulHide() {
+        if (isShow === -1)
+            showSide();
+        isShow = 1;
+    }
 </script>
 </html>

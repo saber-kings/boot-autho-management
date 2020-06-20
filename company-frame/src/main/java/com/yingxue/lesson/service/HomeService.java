@@ -3,14 +3,20 @@ package com.yingxue.lesson.service;
 import com.yingxue.lesson.vo.resp.HomeRespVO;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 首页相关业务接口
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/30
- * @Package: com.yingxue.lesson.service
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/30
+ * @package com.yingxue.lesson.service
  */
 public interface HomeService {
+    /**
+     * 根据用户ID查询首页信息（菜单权限和用户基本信息）
+     *
+     * @param userId 用户ID
+     * @return 首页信息
+     */
     HomeRespVO getHome(String userId);
 }

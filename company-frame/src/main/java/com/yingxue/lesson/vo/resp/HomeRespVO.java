@@ -7,13 +7,13 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
- * TODO: 响应查询首页菜单栏请求的数据封装类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/27
- * @Package: com.yingxue.lesson.vo.resp
- * @Version: 0.0.1
+ * @author Saber污妖王
+ * TODO 响应查询首页菜单栏请求的数据封装类
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/27
+ * @package com.yingxue.lesson.vo.resp
  */
 @Data
 @ApiModel(description = "返回首页菜单栏的相关数据")

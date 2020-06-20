@@ -5,6 +5,11 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 菜单权限实体
+ *
+ * @author Saber污妖王
+ */
 @Data
 public class SysPermission implements Serializable {
     private String id;

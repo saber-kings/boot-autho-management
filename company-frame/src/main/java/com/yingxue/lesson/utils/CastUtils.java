@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 类型转换工具
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/5/2
- * @Package: com.yingxue.lesson.utils
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/5/2
+ * @package com.yingxue.lesson.utils
  */
 public class CastUtils {
     /**

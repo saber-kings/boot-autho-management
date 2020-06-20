@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/custom.form.css">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="panel panel-default operation_file" style="margin-bottom: -20px;" hidden>
+            <div class="panel-heading title"></div>
+            <div class="layui-card-body">
+                <form class="layui-form " action="" lay-filter="deptInfo" style="width: 700px;margin-top: 10px">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">类型</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="type" value="1" title="其他文件" checked="" lay-filter="radio-type">
+                            <input type="radio" name="type" value="3" title="视频文件" lay-filter="radio-type">
+                        </div>
+                    </div>
+                    <div class="layui-form-item file-item">
+                        <div class="layui-form-label ">文件上传</div>
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn layui-btn-normal" id="fileBtn">
+                                <i class="layui-icon">&#xe67c;</i>
+                                上传文件
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-form-item video-item">
+                        <div class="layui-form-label ">视频上传</div>
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn layui-btn-normal" id="videoBtn">
+                                <i class="layui-icon">&#xe6ed;</i>
+                                上传视频
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button type="button" class="layui-btn" id="uploadFileBtn">
+                                保存
+                            </button>
+                            <button type="button" class="layui-btn" id="uploadVideoBtn"
+                                    style="margin-left: 0;">
+                                保存
+                            </button>
+                            <button class="layui-btn layui-btn-primary" id="btn_cancel">返回</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div class="file_table_div">
+                <table class="layui-hide" id="file_table" lay-filter="file_table"></table>
+                <div class="layui-table-page">
+                    <div id="laypage"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-container">
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="add">
+            <i class="layui-icon">&#xe608;</i> 新增文件
+        </button>
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelete">
+            <i class="layui-icon">&#xe640;</i> 批量删除
+        </button>
+    </div>
+</script>
+<script type="text/html" id="tool">
+    <a class="layui-btn layui-btn-xs" lay-event="download">下载</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="/layui/layui.js"></script>
+<script src="/js/core.util.js"></script>
+<script>
+    layui.use(['table', 'laypage', 'jquery', 'layer', 'form', 'upload'], function () {
+        var table = layui.table;
+        var laypage = layui.laypage
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var upload = layui.upload;
+        var searchParam = {
+            pageNum: 1,
+            pageSize: 10
+        };
+        /*动态获取数据*/
+        CoreUtil.sendAjax("/api/files", JSON.stringify(searchParam), function (res) {
+            //初始化分页器
+            laypageTable(res.data.totalRows, searchParam.pageNum);
+            //初始化渲染数据
+            if (res.data.list != null) {
+                loadTable(res.data.list);
+            }
+        }, "POST", false);
+
+        //渲染分页插件
+        var laypageTable = function (count, currentPage) {
+            laypage.render({
+                elem: 'laypage',
+                count: count,
+                limit: searchParam.pageSize,
+                layout: ['prev', 'page', 'next', 'skip', 'limit', 'refresh', 'count'],
+                curr: location.hash.replace('#!currentPage=', ''), //获取起始页
+                hash: 'currentPage', //自定义hash值
+                //连续出现的页码个数
+                groups: 3,
+                //自定义“上一页”的内容，支持传入普通文本和HTML
+                prev: '<i class="layui-icon">&#xe603;</i>',
+                //自定义“下一页”的内容，同上
+                next: '<i class="layui-icon">&#xe602;</i>',
+                jump: function (obj, first) {
+                    if (!first) {
+                        searchParam.pageNum = obj.curr;
+                        searchParam.pageSize = obj.limit;
+                        CoreUtil.sendAjax("/api/files", JSON.stringify(searchParam), function (res) {
+                            if (res.data.list != null) {
+                                loadTable(res.data.list);
+                                laypageTable(res.data.totalRows, searchParam.pageNum);
+                            }
+                        }, "POST", false);
+                    }
+                }
+            });
+        };
+
+        //渲染table
+        var loadTable = function (data) {
+            //展示已知数据
+            table.render({
+                elem: '#file_table',
+                cols: [
+                    [
+                        {type: 'checkbox', fixed: 'left'},
+                        {field: 'id', title: 'ID', width: 200, sort: true},
+                        {field: 'fileName', title: '文件名称', width: 200},
+                        {field: 'extensionName', title: '文件格式', width: 100},
+                        {field: 'originalName', title: '文件原始名称', minWidth: 150},
+                        {
+                            field: 'type', title: '文件类型', minWidth: 120, templet: function (item) {
+                                if (item.type != null && item.type === 3) {
+                                    return "视频"
+                                } else if (item.type != null && item.type === 2) {
+                                    return "轮播图";
+                                } else if (item.type != null) {
+                                    return "其他文件";
+                                }
+                            }
+                        },
+                        {
+                            field: 'createTime', title: '创建时间', minWidth: 120, templet: function (item) {
+                                return CoreUtil.formattime(item.createTime);
+                            }
+                        },
+                        {field: 'size', title: '文件大小', width: 150},
+                        {title: '操作', width: 200, toolbar: '#tool'}
+                    ]
+                ],
+                data: data,
+                //不启用隔行背景
+                even: false,
+                limit: data.length,
+                limits: [10, 20, 30, 40, 50],
+                toolbar: '#toolbar'
+            });
+        };
+
+        //监听事件
+        table.on('toolbar(file_table)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+
+            switch (obj.event) {
+                case 'add':
+                    $(".file_table_div").hide();
+                    $(".operation_file").show();
+                    $(".title").html("新增文件");
+                    initRadio(1);
+                    $(".video-item").hide();
+                    $("#uploadVideoBtn").hide();
+                    break;
+                case 'batchDelete':
+                    var data = checkStatus.data;
+                    if (data.length === 0) {
+                        layer.msg("请选择要批量删除的文件");
+                    } else {
+                        var fileNames = [];
+                        $(data).each(function (index, item) {
+                            fileNames.push(item.fileName);
+                        });
+                        tipDialog(fileNames, "选中的文件");
+                    }
+                    break;
+            }
+        });
+
+        //初始化 radio 状态
+        var initRadio = function (value) {
+            var radio = document.getElementsByName("type");
+            var radioLength = radio.length;
+            for (var i = 0; i < radioLength; i++) {
+                if (Number(value) === Number(radio[i].value)) {
+                    $(radio[i]).next().click();
+                }
+            }
+        };
+
+        //radio 事件
+        form.on('radio(radio-type)', function (data) {
+            if (data.value === '1') {
+                $(".video-item").hide();
+                $("#uploadVideoBtn").hide();
+                $(".file-item").show();
+                $("#uploadFileBtn").show();
+            } else {
+                $(".file-item").hide();
+                $("#uploadFileBtn").hide();
+                $(".video-item").show();
+                $("#uploadVideoBtn").show();
+            }
+        });
+
+        var saveLoading;
+        //指定允许上传的文件类型
+        var uploadFile = upload.render({
+            elem: '#fileBtn',
+            url: '/api/file', //改成您自己的上传接口
+            accept: 'file', //普通文件
+            // 只允许上传：常见文档、表格、ppt、pdf、压缩文件、图片这几种类型的文件
+            exts: 'doc|docx|xls|xlsx|pptx|ppt|pdf|txt|exe|zip|rar|7z|png|gif|jpg|bmp|tif|psd|ai|webp|ico|svg|eps',
+            size: 102400, //限制文件大小，单位 KB
+            auto: false, //设置不自动上传
+            bindAction: '#uploadFileBtn', //绑定按钮，当点击该按钮时上传
+            headers: {
+                "authorization": CoreUtil.getData("access_token"),
+                "file-type_": 1
+            },
+            before: function () {
+                $(".operation_file").hide();
+                $(".file_table_div").show();
+                saveLoading = layer.msg('文件上传中，请稍候', {icon: 16, time: false, shade: 0.8});
+            },
+            done: function (res) {
+                layer.close(saveLoading);
+                //上传成功
+                if (res.code === 0) {
+                    layer.msg('文件上传成功');
+                    $(".layui-laypage-btn").click();
+                } else {
+                    //如果上传失败
+                    layer.msg(res.msg);
+                }
+            },
+            error: function () {
+                layer.close(saveLoading);
+                layer.msg('上传失败');
+            }
+        });
+
+        var uploadVideo = upload.render({
+            elem: '#videoBtn',
+            url: '/api/file', //改成您自己的上传接口
+            accept: 'video', //视频
+            size: 102400, //限制文件大小，单位 KB
+            auto: false, //设置不自动上传
+            bindAction: '#uploadVideoBtn', //绑定按钮，当点击该按钮时上传
+            multiple: true,
+            headers: {
+                "authorization": CoreUtil.getData("access_token"),
+                "file-type_": 3
+            },
+            before: function () {
+                $(".operation_file").hide();
+                $(".file_table_div").show();
+                saveLoading = layer.msg('视频上传中，请稍候', {icon: 16, time: false, shade: 0.8});
+            },
+            done: function (res) {
+                layer.close(saveLoading);
+                //上传成功
+                if (res.code === 0) {
+                    layer.msg('视频上传成功');
+                    $(".layui-laypage-btn").click();
+                } else {
+                    //如果上传失败
+                    layer.msg(res.msg);
+                }
+            },
+            error: function () {
+                layer.close(saveLoading);
+                layer.msg('上传失败');
+            }
+        });
+
+        //返回列表
+        $("#btn_cancel").click(function () {
+            //显示表格
+            $(".file_table_div").show();
+            //隐藏编辑窗口
+            $(".operation_file").hide();
+            //可以防止在表单事件操作后自动刷新
+            return false;
+        });
+
+        //行监听工具条
+        //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        table.on('tool(file_table)', function (obj) {
+            //获得当前行数据
+            var data = obj.data;
+            //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var layEvent = obj.event;
+            switch (layEvent) {
+                case 'download':
+                    // window.location.href = "/api/file/" + data.id;
+                    // 获取XMLHttpRequest
+                    var xmlRequest = new XMLHttpRequest();
+                    // 发起请求
+                    xmlRequest.open("GET", "/api/file/" + data.id, true);
+                    xmlRequest.setRequestHeader("authorization", CoreUtil.getData("access_token"));
+                    xmlRequest.responseType = "blob";
+                    // 返回
+                    xmlRequest.onreadystatechange = function () {
+                        if (xmlRequest.readyState === 4 && xmlRequest.status === 200) {
+                            //得到文件名
+                            var contentDisposition = xmlRequest.getResponseHeader("Content-disposition");
+                            var filename = contentDisposition.substring(20, contentDisposition.length);
+                            //得到文件类型
+                            var contentType = xmlRequest.getResponseHeader("Content-Type");
+                            var content = xmlRequest.response;
+                            // 组装a标签
+                            var aLink = document.createElement("a");
+                            //设置文件下载路径
+                            aLink.download = escape(filename);
+                            aLink.style.display = "none";
+                            //把后端response响应二进制文件放到blob
+                            var blob = new Blob([content], {type: contentType});
+                            //解决下载不存在文件的问题，根据blob大小判断
+                            if (blob.size === 0) {
+                                layer.msg('服务器没找到此文件，请联系管理员!');
+                            } else {
+                                //通过url去下载
+                                aLink.href = URL.createObjectURL(blob);
+                                document.body.appendChild(aLink);
+                                aLink.click();
+                                document.body.removeChild(aLink);
+                            }
+                        }
+                    };
+                    xmlRequest.send();
+                    break;
+                case 'del':
+                    var fileNames = [];
+                    fileNames.push(data.fileName);
+                    tipDialog(fileNames, data.originalName);
+                    break;
+            }
+        });
+
+        //删除前确认对话框
+        var tipDialog = function (fileNames, msg) {
+            layer.open({
+                title: '确认',
+                content: '确定要删除 ' + msg + " 么?",
+                yes: function (index, layerObj) {
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                    CoreUtil.sendAjax("/api/file", JSON.stringify(fileNames), function (res) {
+                        layer.msg(res.msg);
+                        $(".layui-laypage-btn").click();
+                    }, "DELETE", false, function (res) {
+                        layer.msg(res.msg);
+                    });
+                }
+            });
+        };
+
+    });
+</script>
+</html>

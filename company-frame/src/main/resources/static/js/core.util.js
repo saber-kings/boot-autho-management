@@ -8,13 +8,13 @@ var CoreUtil = (function () {
         layui.jquery.ajax({
             url: url,
             cache: false,
-            async: async == undefined ? true : async,
+            async: async == null ? true : async,
             data: params,
-            type: method == undefined ? "POST" : method,
-            contentType: contentType == undefined ? 'application/json; charset=UTF-8' : contentType,
+            type: method == null ? "POST" : method,
+            contentType: contentType == null ? 'application/json; charset=UTF-8' : contentType,
             dataType: "json",
             beforeSend: function (request) {
-                if (headers == undefined) {
+                if (headers == null) {
                 } else if (headers) {
                     request.setRequestHeader("authorization", CoreUtil.getData("access_token"));
                     request.setRequestHeader("refresh_token", CoreUtil.getData("refresh_token"));
@@ -47,13 +47,13 @@ var CoreUtil = (function () {
                             }
                         }, "GET", true);
                     } else if (res.code === 0) {
-                        if (ft != null && ft != undefined) {
+                        // if (ft != null) {
                             ft(res);
-                        }
+                        // }
                     } else if (res.code === 4030001) {
-                        if (ft != null && ft != undefined) {
+                        // if (ft != null) {
                             noAuthorityFt(res);
-                        }
+                        // }
                     } else {
                         layer.msg(res.msg)
                     }
@@ -64,6 +64,8 @@ var CoreUtil = (function () {
                     top.window.location.href = "/index/404";
                 } else {
                     layer.msg("服务器好像除了点问题！请稍后试试");
+                    console.log(textStatus);
+                    console.log(errorThrown);
                 }
             }
         });

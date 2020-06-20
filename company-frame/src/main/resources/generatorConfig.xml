@@ -7,7 +7,7 @@
     <classPathEntry location="F:\Maven\repository\mysql\mysql-connector-java\8.0.19\mysql-connector-java-8.0.19.jar"/>
     <!-- 一个数据库一个context -->
     <!--defaultModelType="flat" 大数据字段，不分表 -->
-    <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
+    <context id="MysqlTables" targetRuntime="MyBatis3DynamicSql" defaultModelType="flat">
         <property name="autoDelimitKeywords" value="true"/>
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
@@ -56,55 +56,71 @@
             <columnOverride column="create_where" javaType="java.lang.Integer"/>
             <columnOverride column="deleted" javaType="java.lang.Integer"/>
         </table>-->
-        <table tableName="sys_dept" domainObjectName="SysDept"
+<!--        <table tableName="sys_dept" domainObjectName="SysDept"-->
 
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="true">-->
+<!--            <columnOverride column="status" javaType="java.lang.Integer"/>-->
+<!--            <columnOverride column="deleted" javaType="java.lang.Integer"/>-->
+<!--        </table>-->
+<!--        <table tableName="sys_log" domainObjectName="SysLog"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="true">-->
+<!--        </table>-->
+<!--        <table tableName="sys_permission" domainObjectName="SysPermission"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="true">-->
+<!--            <columnOverride column="type" javaType="java.lang.Integer"/>-->
+<!--            <columnOverride column="status" javaType="java.lang.Integer"/>-->
+<!--            <columnOverride column="deleted" javaType="java.lang.Integer"/>-->
+<!--        </table>-->
+<!--        <table tableName="sys_role" domainObjectName="SysRole"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="true">-->
+<!--            <columnOverride column="status" javaType="java.lang.Integer"/>-->
+<!--            <columnOverride column="deleted" javaType="java.lang.Integer"/>-->
+<!--        </table>-->
+<!--        <table tableName="sys_role_permission" domainObjectName="SysRolePermission"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="true">-->
+<!--        </table>-->
+<!--        <table tableName="sys_user_role" domainObjectName="SysUserRole"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="true">-->
+<!--        </table>-->
+<!--        <table tableName="sys_file" domainObjectName="SysFile"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="true">-->
+<!--            <columnOverride column="type" javaType="java.lang.Integer"/>-->
+<!--        </table>-->
+        <table tableName="sys_rotation_chart" domainObjectName="SysRotationChart"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
                enableSelectByExample="false"
                selectByExampleQueryId="true">
-            <columnOverride column="status" javaType="java.lang.Integer"/>
-            <columnOverride column="deleted" javaType="java.lang.Integer"/>
-        </table>
-        <table tableName="sys_log" domainObjectName="SysLog"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="true">
-        </table>
-        <table tableName="sys_permission" domainObjectName="SysPermission"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="true">
-            <columnOverride column="type" javaType="java.lang.Integer"/>
-            <columnOverride column="status" javaType="java.lang.Integer"/>
-            <columnOverride column="deleted" javaType="java.lang.Integer"/>
-        </table>
-        <table tableName="sys_role" domainObjectName="SysRole"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="true">
-            <columnOverride column="status" javaType="java.lang.Integer"/>
-            <columnOverride column="deleted" javaType="java.lang.Integer"/>
-        </table>
-        <table tableName="sys_role_permission" domainObjectName="SysRolePermission"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="true">
-        </table>
-        <table tableName="sys_user_role" domainObjectName="SysUserRole"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="true">
+            <columnOverride column="sort" javaType="java.lang.Integer"/>
         </table>
     </context>
 </generatorConfiguration>

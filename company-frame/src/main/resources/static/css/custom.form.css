@@ -1,20 +1,53 @@
-.panel-heading{
-    padding:10px 10px;
-    border-bottom:1px solid transparent;
-    border-radius:2px 2px 0 0;
-    font-size:14px;
-    background: #eeeeee
+html {
+    background-color: #f2f2f2;
+    color: #666;
 }
-.panel{
-    margin-bottom:20px;
-    background-color:#fff;
-    border:1px solid transparent;
-    border-radius:4px;
-    -webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);
-    box-shadow:0 1px 1px rgba(0,0,0,.05)
+
+.layui-fluid {
+    padding: 15px !important;
 }
-.panel-default{
-    border-color:#ddd;
+
+.layui-table, .layui-table-view {
+    margin: 0 !important;
+}
+
+#searchParam {
+    padding: 15px 15px;
+}
+
+#searchParam .layui-form-item {
+    margin-bottom: 0;
+}
+
+.layui-card-header {
+    height: 38px;
+    line-height: 38px;
+}
+
+.layui-card-header.my-card-header-auto {
+    height: auto;
+    line-height: 100%;
+}
+
+.panel-heading {
+    padding: 10px 10px;
+    border-bottom: 1px solid transparent;
+    border-radius: 2px 2px 0 0;
+    font-size: 14px;
+    background: #eeeeee;
+}
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .05)
+}
+
+.panel-default {
+    border-color: #ddd;
 }
 
 .layui-input, .layui-textarea {
@@ -35,4 +68,13 @@
     background-color: #FBFBFB;
     overflow: hidden;
     box-sizing: border-box;
+}
+
+.layui-table-page {
+    margin-bottom: 0 !important;
+    border: 1px solid #e6e6e6 !important;
+    border-top-width: 0 !important;
+    -webkit-box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    box-sizing: border-box !important;
 }

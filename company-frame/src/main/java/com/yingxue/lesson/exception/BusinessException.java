@@ -4,13 +4,13 @@ import com.yingxue.lesson.exception.code.ResponseCodeInterface;
 import lombok.Getter;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 自定义业务异常类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/24
- * @Package: com.yingxue.lesson.exception
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/24
+ * @package com.yingxue.lesson.exception
  */
 @Getter
 public class BusinessException extends RuntimeException {
@@ -32,6 +32,7 @@ public class BusinessException extends RuntimeException {
 
     /**
      * 构造函数
+     *
      * @param code 异常码
      */
     public BusinessException(ResponseCodeInterface code) {

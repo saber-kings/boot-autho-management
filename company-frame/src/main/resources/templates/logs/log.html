@@ -1,37 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" xml:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/css/custom.form.css">
 </head>
 <body>
-<div id="searchParam" shiro:hasPermission="sys:log:list">
-    <div class="layui-form-item">
-        <div class="layui-input-inline">
-            <input type="text" id="userId" class="layui-input" autocomplete="off" placeholder="用户ID">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="searchParam" class="layui-form layui-card-header my-card-header-auto" shiro:hasPermission="sys:log:list">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input type="text" id="userId" class="layui-input" autocomplete="off" placeholder="用户ID">
+                </div>
+                <div class="layui-inline">
+                    <input type="text" id="username" class="layui-input" autocomplete="off" placeholder="请输入账号">
+                </div>
+                <div class="layui-inline">
+                    <input type="text" id="operation" class="layui-input" autocomplete="off" placeholder="用户操作动作">
+                </div>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="createTime" autocomplete="off" placeholder="创建时间">
+                </div>
+                <div class="layui-inline ">
+                    <button class="layui-btn" id="search">查询</button>
+                </div>
+            </div>
         </div>
-        <div class="layui-input-inline">
-            <input type="text" id="username" class="layui-input" autocomplete="off" placeholder="请输入账号">
-        </div>
-        <div class="layui-input-inline">
-            <input type="text" id="operation" class="layui-input" autocomplete="off" placeholder="用户操作动作">
-        </div>
-        <div class="layui-input-inline">
-            <input type="text" class="layui-input" id="createTime" placeholder="创建时间">
-        </div>
-        <div class="layui-input-inline ">
-            <button class="layui-btn" id="search">查询</button>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="log_table" lay-filter="log_table"></table>
+            <div class="layui-table-page">
+                <div id="laypage"></div>
+            </div>
         </div>
     </div>
 </div>
-<table class="layui-hide" id="log_table" lay-filter="log_table"></table>
-<div id="laypage" class="layui-laypage-btn"></div>
 </body>
 <script type="text/html" id="toolbar">
-    <div class="layui-btn-group">
-        <button type="button" class="layui-btn" lay-event="batchDelLog" shiro:hasPermission="sys:log:delete">
-            <i class="layui-icon">&#xe608;</i> 批量删除
+    <div class="layui-btn-container">
+        <button type="button" class="layui-btn layui-btn-sm" lay-event="batchDelLog" shiro:hasPermission="sys:log:delete">
+            <i class="layui-icon">&#xe640;</i> 批量删除
         </button>
     </div>
 </script>
@@ -76,9 +85,15 @@
                 elem: 'laypage',
                 count: count,
                 limit: searchParam.pageSize,
-                layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
+                layout: ['prev', 'page', 'next', 'skip', 'limit', 'refresh', 'count'],
                 curr: location.hash.replace('#!currentPage=', ''), //获取起始页
                 hash: 'currentPage', //自定义hash值
+                //连续出现的页码个数
+                groups: 3,
+                //自定义“上一页”的内容，支持传入普通文本和HTML
+                prev: '<i class="layui-icon">&#xe603;</i>',
+                //自定义“下一页”的内容，同上
+                next: '<i class="layui-icon">&#xe602;</i>',
                 jump: function (obj, first) {
                     if (!first) {
                         searchParam.pageNum = obj.curr;
@@ -123,7 +138,8 @@
                     ]
                 ],
                 data: data,
-                even: true,
+                //不启用隔行背景
+                even: false,
                 limit: data.length,
                 limits: [10, 20, 30, 40, 50],
                 toolbar: '#toolbar'

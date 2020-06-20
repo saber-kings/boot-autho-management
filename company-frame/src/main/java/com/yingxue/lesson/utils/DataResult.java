@@ -9,13 +9,13 @@ import lombok.Data;
 
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 前后端分离统一数据封装类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/24
- * @Package: com.yingxue.lesson.utils
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/24
+ * @package com.yingxue.lesson.utils
  */
 @Data
 @AllArgsConstructor
@@ -100,7 +100,7 @@ public class DataResult<T> {
      * 自定义 返回操作 data 可控
      *
      * @param code 响应码
-     * @param msg 提示
+     * @param msg  提示
      * @param data 结果
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
@@ -115,7 +115,7 @@ public class DataResult<T> {
      * 自定义返回  data为null
      *
      * @param code 响应码
-     * @param msg 提示
+     * @param msg  提示
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
      * @UpdateUser: Saber污妖王
@@ -142,7 +142,7 @@ public class DataResult<T> {
      * 自定义返回 入参一般是异常code枚举 data 可控
      *
      * @param responseCode 响应码
-     * @param data 结果
+     * @param data         结果
      * @return com.yingxue.lesson.utils.DataResult<T>
      * @Author: 小霍
      * @UpdateUser: Saber污妖王

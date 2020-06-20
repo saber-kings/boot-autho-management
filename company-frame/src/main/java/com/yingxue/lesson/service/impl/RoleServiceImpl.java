@@ -7,6 +7,7 @@ import com.yingxue.lesson.exception.BusinessException;
 import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.mapper.SysRoleMapper;
 import com.yingxue.lesson.service.*;
+import com.yingxue.lesson.utils.BeanUtils;
 import com.yingxue.lesson.utils.PageUtil;
 import com.yingxue.lesson.utils.TokenSettings;
 import com.yingxue.lesson.vo.req.RoleAddReqVO;
@@ -16,7 +17,6 @@ import com.yingxue.lesson.vo.req.RoleUpdateReqVO;
 import com.yingxue.lesson.vo.resp.PageRespVO;
 import com.yingxue.lesson.vo.resp.PermissionRespNodeVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +25,13 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 角色业务层实现类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/4/19
- * @Package: com.yingxue.lesson.service.impl
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/4/19
+ * @package com.yingxue.lesson.service.impl
  */
 @Slf4j
 @Service
@@ -115,13 +115,6 @@ public class RoleServiceImpl implements RoleService {
      * @param checkList 原先拥有的菜单权限
      */
     private void setChecked(List<PermissionRespNodeVO> list, Set<String> checkList) {
-//        for (PermissionRespNodeVO node : list) {
-//            if (checkList.contains(node.getId()) &&
-//                    (node.getChildren() == null || node.getChildren().isEmpty())) {
-//                node.setChecked(true);
-//            }
-//            setChecked(node.getChildren(), checkList);
-//        }
         list.forEach(node -> {
             if (checkList.contains(node.getId()) &&
                     (node.getChildren() == null || node.getChildren().isEmpty())) {
@@ -162,6 +155,7 @@ public class RoleServiceImpl implements RoleService {
 
     /**
      * 标记传入角色关联的用户，使得在用户认证的时候去主动刷新
+     *
      * @param id 传入角色的 id
      */
     private void markUser(String id) {

@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 测试模块相关接口
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/24
- * @Package: com.yingxue.lesson.controller
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/24
+ * @package com.yingxue.lesson.controller
  */
 @RestController
 @Api(tags = "测试模块")
@@ -34,9 +34,7 @@ public class TestController {
     @GetMapping("/home")
     @ApiOperation(value = "测试统一返回格式的接口")
     public DataResult<Object> getHome() {
-//        DataResult<String> result = DataResult.success();
         DataResult<Object> result = DataResult.getResult(BaseResponseCode.SUCCESS);
-//        result.setData("哈哈哈哈！请求成功了！");
         List<String> list = new ArrayList<>();
         list.add("a");
         list.add("b");
@@ -48,8 +46,8 @@ public class TestController {
 
     @GetMapping("/business/error")
     @ApiOperation(value = "测试主动抛出业务异常接口")
-    public DataResult<String> testBusinessError(@RequestParam String type){
-        if(!(type.equals("1")||type.equals("2")||type.equals("3"))){
+    public DataResult<String> testBusinessError(@RequestParam String type) {
+        if (!("1".equals(type) || "2".equals(type) || "3".equals(type))) {
             throw new BusinessException(BaseResponseCode.DATA_ERROR);
         }
         return new DataResult<>(0, type);
@@ -57,7 +55,7 @@ public class TestController {
 
     @PostMapping("/valid/error")
     @ApiOperation(value = "测试 Validator 抛出业务异常接口")
-    public DataResult<Object> testValid(@RequestBody @Valid TestReqVO vo){
+    public DataResult<Object> testValid(@RequestBody @Valid TestReqVO vo) {
         return DataResult.success(vo);
     }
 

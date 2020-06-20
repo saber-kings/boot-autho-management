@@ -5,22 +5,22 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 角色信息分页查询的数据封装类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/4/19
- * @Package: com.yingxue.lesson.vo.req
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/4/19
+ * @package com.yingxue.lesson.vo.req
  */
 @Data
 @ApiModel(description = "接收前端分页查询角色信息请求提交的数据")
 public class RolePageReqVO {
     @ApiModelProperty("第几页")
-    private int pageNum = 1;
+    private Integer pageNum;
 
     @ApiModelProperty("当前页的数量")
-    private int pageSize = 10;
+    private Integer pageSize;
 
     @ApiModelProperty("角色ID")
     private String roleId;
@@ -35,5 +35,10 @@ public class RolePageReqVO {
     private String endTime;
 
     @ApiModelProperty("角色状态(1:正常0:弃用)")
-    private String status;
+    private Integer status;
+
+    public RolePageReqVO() {
+        this.pageNum = 1;
+        this.pageSize = 10;
+    }
 }

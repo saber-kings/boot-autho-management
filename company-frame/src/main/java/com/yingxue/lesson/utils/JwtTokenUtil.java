@@ -14,13 +14,13 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: JWT 工具类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/25
- * @Package: com.yingxue.lesson.utils
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor luanz
+ * @project company-frame
+ * @date 2020/3/25
+ * @package com.yingxue.lesson.utils
  */
 @Slf4j
 public class JwtTokenUtil {
@@ -157,6 +157,7 @@ public class JwtTokenUtil {
             Claims claims = getClaimsFromToken(token);
             userId = claims.getSubject();
         } catch (Exception e) {
+            log.error("error: ", e);
             log.error("error={}", e.getLocalizedMessage());
         }
         return userId;

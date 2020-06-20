@@ -7,17 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 /**
- * @Author: 小霍
+ * @author 小霍
  * TODO: 获取 http 上下文
- * @UpdateUser: Saber污妖王
- * @Project: company-frame
- * @Date: 2020/3/25
- * @Package: com.yingxue.lesson.utils
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/25
+ * @package com.yingxue.lesson.utils
  */
 public class HttpContextUtils {
 
-	public static HttpServletRequest getHttpServletRequest() {
-		return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-	}
+    public static HttpServletRequest getHttpServletRequest() {
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+    }
 }

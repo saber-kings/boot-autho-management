@@ -25,13 +25,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 用户模块相关接口
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/25
- * @Package: com.yingxue.lesson.controller
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/25
+ * @package com.yingxue.lesson.controller
  */
 @Slf4j
 @RestController
@@ -122,11 +122,12 @@ public class UserController {
         userService.updateUserInfo(vo, userId);
         return DataResult.success();
     }
+
     @DeleteMapping("/user")
     @ApiOperation(value = "批量/删除用户接口")
     @RequiresPermissions("sys:user:delete")
     @MyLog(title = "组织模块-用户管理", action = "批量/删除用户接口")
-    public DataResult<Object> deletedUsers(@RequestBody @ApiParam("用户id集合") List<String> list, HttpServletRequest request){
+    public DataResult<Object> deletedUsers(@RequestBody @ApiParam("用户id集合") List<String> list, HttpServletRequest request) {
         String accessToken = request.getHeader(Constant.ACCESS_TOKEN);
         String operationId = JwtTokenUtil.getUserId(accessToken);
         userService.deletedUsers(list, operationId);

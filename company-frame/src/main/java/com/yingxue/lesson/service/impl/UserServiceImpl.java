@@ -1,7 +1,5 @@
 package com.yingxue.lesson.service.impl;
 
-import java.util.*;
-
 import com.github.pagehelper.PageHelper;
 import com.yingxue.lesson.constants.Constant;
 import com.yingxue.lesson.entity.SysData;
@@ -12,10 +10,7 @@ import com.yingxue.lesson.exception.code.BaseResponseCode;
 import com.yingxue.lesson.mapper.SysDeptMapper;
 import com.yingxue.lesson.mapper.SysUserMapper;
 import com.yingxue.lesson.service.*;
-import com.yingxue.lesson.utils.JwtTokenUtil;
-import com.yingxue.lesson.utils.PageUtil;
-import com.yingxue.lesson.utils.PasswordUtils;
-import com.yingxue.lesson.utils.TokenSettings;
+import com.yingxue.lesson.utils.*;
 import com.yingxue.lesson.vo.req.*;
 import com.yingxue.lesson.vo.resp.LoginRespVO;
 import com.yingxue.lesson.vo.resp.PageRespVO;
@@ -23,22 +18,22 @@ import com.yingxue.lesson.vo.resp.UserOwnRoleRespVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 用户业务层实现类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/25
- * @Package: com.yingxue.lesson.service.impl
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/25
+ * @package com.yingxue.lesson.service.impl
  */
 @Service
 @Slf4j
@@ -65,6 +60,8 @@ public class UserServiceImpl implements UserService {
     @Resource
     private PermissionService permissionService;
 
+    @Resource
+    private FileService fileService;
 
     @Resource
     private DataService dataService;
@@ -88,13 +85,13 @@ public class UserServiceImpl implements UserService {
         loginRespVO.setPhone(userInfoByName.getPhone());
         loginRespVO.setUsername(userInfoByName.getUsername());
         loginRespVO.setId(userInfoByName.getId());
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>(16);
         claims.put(Constant.JWT_ROLES_KEY, getRolesByUserId(userInfoByName.getId()));
         claims.put(Constant.JWT_PERMISSIONS_KEY, getPermissionsByUserId(userInfoByName.getId()));
         claims.put(Constant.JWT_USER_NAME, userInfoByName.getUsername());
         String accessToken = JwtTokenUtil.getAccessToken(userInfoByName.getId(), claims);
         String refreshToken;
-        if (vo.getType().equals("1")) {
+        if ("1".equals(vo.getType())) {
             refreshToken = JwtTokenUtil.getRefreshToken(userInfoByName.getId(), claims);
         } else {
             refreshToken = JwtTokenUtil.getRefreshAppToken(userInfoByName.getId(), claims);
@@ -148,12 +145,6 @@ public class UserServiceImpl implements UserService {
      * @Version: 0.0.1
      */
     private List<String> getRolesByUserId(String userId) {
-//        List<String> list = new ArrayList<>();
-//        if ("9a26f5f1-cbd2-473d-82db-1d6dcf4598f8".equals(userId)) {
-//            list.add("admin");
-//        } else {
-//            list.add("test");
-//        }
         return roleService.getNamesByIds(userId);
     }
 
@@ -170,15 +161,6 @@ public class UserServiceImpl implements UserService {
      * @Version: 0.0.1
      */
     private List<String> getPermissionsByUserId(String userId) {
-//        List<String> list = new ArrayList<>();
-//        if ("9a26f5f1-cbd2-473d-82db-1d6dcf4598f8".equals(userId)) {
-//            list.add("sys:user:add");
-//            list.add("sys:user:list");
-//            list.add("sys:user:update");
-//            list.add("sys:user:detail");
-//        } else {
-//            list.add("sys:user:detail");
-//        }
         return permissionService.getPermissionByUserId(userId);
     }
 
@@ -226,7 +208,7 @@ public class UserServiceImpl implements UserService {
         }
         String userId = JwtTokenUtil.getUserId(refreshToken);
         String userName = JwtTokenUtil.getUserName(refreshToken);
-        HashMap<String, Object> cliams = new HashMap<>();
+        HashMap<String, Object> cliams = new HashMap<>(16);
         cliams.put(Constant.JWT_USER_NAME, userName);
         cliams.put(Constant.JWT_ROLES_KEY, getRolesByUserId(userId));
         cliams.put(Constant.JWT_PERMISSIONS_KEY, getPermissionsByUserId(userId));
@@ -275,6 +257,7 @@ public class UserServiceImpl implements UserService {
                     TimeUnit.MILLISECONDS);
             //删除用户缓存的授权信息
             redisService.delete(Constant.IDENTIFY_CACHE_KEY + userId);
+            fileService.batchDeleteByUserId(userId);
         });
     }
 
@@ -334,7 +317,7 @@ public class UserServiceImpl implements UserService {
         List<SysData> tables = dataService.selectTableOrField(0);
 
         List<List<SysData>> list = tables.stream().map(t -> {
-            if (t.getId()==1) {
+            if (t.getId() == 1) {
                 return dataService.selectTableOrField(t.getId());
             }
             return null;

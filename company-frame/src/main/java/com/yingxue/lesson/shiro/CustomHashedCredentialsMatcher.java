@@ -13,13 +13,13 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 自定义用户凭证验证器
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/26
- * @Package: com.yingxue.lesson.shiro
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/26
+ * @package com.yingxue.lesson.shiro
  */
 public class CustomHashedCredentialsMatcher extends HashedCredentialsMatcher {
     @Resource
@@ -54,7 +54,7 @@ public class CustomHashedCredentialsMatcher extends HashedCredentialsMatcher {
              * 通过剩余的过期时间比较如 果 token 的剩余过期时间大与标记 key 的剩余过期时间
              * 就说明这个 token 是在这个标记 key 之后生成的
              */
-            if (redisService.getExpire(Constant.JWT_REFRESH_KEY + userId, TimeUnit.MILLISECONDS) > JwtTokenUtil.getRemainingTime(accessToken)){
+            if (redisService.getExpire(Constant.JWT_REFRESH_KEY + userId, TimeUnit.MILLISECONDS) > JwtTokenUtil.getRemainingTime(accessToken)) {
                 throw new BusinessException(BaseResponseCode.TOKEN_PAST_DUE_INVALID);
             }
         }

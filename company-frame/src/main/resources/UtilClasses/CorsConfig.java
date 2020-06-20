@@ -8,14 +8,28 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * @author Saber污妖王
+ * TODO: 跨域配置类，使用了它，就不需要使用跨域过滤器了即 com.yingxue.lesson.config.CrossOriginFilter
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/6/20
+ * @package com.yingxue.lesson.config
+ */
 @Configuration
 public class CorsConfig {
 
-    //从配置文件中读取允许访问的非本机地址
-    @Value("${wedOrigin.name}")
-    private  String wn;
+    /**
+     * 从配置文件中读取允许访问的非本机地址
+     */
+    @Value("${cross.origin}")
+    private  String origin;
 
-    //允许跨域请求
+    /**
+     * 允许跨域请求
+     * @return 跨域过滤器
+     */
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -23,7 +37,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         // 设置你要允许的网站域名，如果全允许则设为 *
         // 遍历数组，将允许访问的地址添加进去
-        String [] result = wn.split(",");
+        String [] result = origin.split(",");
         for (String s : result) {
             config.addAllowedOrigin(s);
         }

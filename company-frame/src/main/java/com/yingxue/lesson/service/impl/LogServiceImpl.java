@@ -15,13 +15,13 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 日志业务层实现类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/5/1
- * @Package: com.yingxue.lesson.service.impl
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/5/1
+ * @package com.yingxue.lesson.service.impl
  */
 @Service
 public class LogServiceImpl implements LogService {

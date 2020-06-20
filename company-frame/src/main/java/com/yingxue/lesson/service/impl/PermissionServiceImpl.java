@@ -1,5 +1,6 @@
 package com.yingxue.lesson.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.yingxue.lesson.constants.Constant;
 import com.yingxue.lesson.entity.SysPermission;
 import com.yingxue.lesson.exception.BusinessException;
@@ -9,12 +10,15 @@ import com.yingxue.lesson.service.PermissionService;
 import com.yingxue.lesson.service.RedisService;
 import com.yingxue.lesson.service.RolePermissionService;
 import com.yingxue.lesson.service.UserRoleService;
+import com.yingxue.lesson.utils.BeanUtils;
+import com.yingxue.lesson.utils.PageUtil;
 import com.yingxue.lesson.utils.TokenSettings;
 import com.yingxue.lesson.vo.req.PermissionAddReqVO;
+import com.yingxue.lesson.vo.req.PermissionPageReqVO;
 import com.yingxue.lesson.vo.req.PermissionUpdateReqVO;
+import com.yingxue.lesson.vo.resp.PageRespVO;
 import com.yingxue.lesson.vo.resp.PermissionRespNodeVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -25,13 +29,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 权限业务层实现类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/31
- * @Package: com.yingxue.lesson.service.impl
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/31
+ * @package com.yingxue.lesson.service.impl
  */
 @Slf4j
 @Service
@@ -54,6 +58,20 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<SysPermission> selectAll() {
         List<SysPermission> sysPermissions = sysPermissionMapper.selectAll();
+        setPidName(sysPermissions);
+        return sysPermissions;
+    }
+
+    @Override
+    public PageRespVO<SysPermission> pageInfo(PermissionPageReqVO vo) {
+        //Mapper接口方式的调用，推荐这种使用方式。
+        PageHelper.startPage(vo.getPageNum(), vo.getPageSize());
+        List<SysPermission> sysPermissions = sysPermissionMapper.pageInfo(vo);
+        setPidName(sysPermissions);
+        return PageUtil.getPageVO(sysPermissions);
+    }
+
+    private void setPidName(List<SysPermission> sysPermissions) {
         if (!sysPermissions.isEmpty()) {
             sysPermissions.forEach(s -> {
                 SysPermission parent = sysPermissionMapper.selectByPrimaryKey(s.getPid());
@@ -62,7 +80,6 @@ public class PermissionServiceImpl implements PermissionService {
                 }
             });
         }
-        return sysPermissions;
     }
 
     @Override
@@ -87,26 +104,11 @@ public class PermissionServiceImpl implements PermissionService {
      * @return java.util.List<com.yingxue.lesson.vo.resp.PermissionRespNodeVO>
      */
     private List<PermissionRespNodeVO> getTree(List<SysPermission> all, boolean type) {
-//        List<PermissionRespNodeVO> list = new ArrayList<>();
         if (all == null || all.isEmpty()) {
             return new ArrayList<>();
         }
-//        for (SysPermission sysPermission : all) {
-//            if (sysPermission.getPid().equals("0")) {
-//                PermissionRespNodeVO respNodeVO = new PermissionRespNodeVO();
-//                BeanUtils.copyProperties(sysPermission, respNodeVO);
-//                respNodeVO.setTitle(sysPermission.getName());
-//                if (type) {
-//                    respNodeVO.setChildren(getChildExcBtn(sysPermission.getId(), all));
-//                } else {
-//                    respNodeVO.setChildren(getChild(sysPermission.getId(), all));
-//                }
-//                list.add(respNodeVO);
-//            }
-//        }
-//        return list;
         return all.stream().map(s -> {
-            if (s.getPid().equals("0")) {
+            if ("0".equals(s.getPid())) {
                 PermissionRespNodeVO respNodeVO = new PermissionRespNodeVO();
                 BeanUtils.copyProperties(s, respNodeVO);
                 respNodeVO.setTitle(s.getName());
@@ -124,22 +126,11 @@ public class PermissionServiceImpl implements PermissionService {
     /**
      * 递归遍历所有数据
      *
-     * @param id 要判断是否是父节点的 id
+     * @param id  要判断是否是父节点的 id
      * @param all 所有节点
      * @return 最终返回传入权限的所有子节点
      */
     private List<PermissionRespNodeVO> getChild(String id, List<SysPermission> all) {
-//        List<PermissionRespNodeVO> list = new ArrayList<>();
-//        for (SysPermission s : all) {
-//            if (s.getPid().equals(id)) {
-//                PermissionRespNodeVO respNodeVO = new PermissionRespNodeVO();
-//                BeanUtils.copyProperties(s, respNodeVO);
-//                respNodeVO.setTitle(s.getName());
-//                respNodeVO.setChildren(getChildExcBtn(s.getId(), all));
-//                list.add(respNodeVO);
-//            }
-//        }
-//        return list;
         return all.stream().map(s -> {
             if (s.getPid().equals(id)) {
                 PermissionRespNodeVO respNodeVO = new PermissionRespNodeVO();
@@ -201,7 +192,7 @@ public class PermissionServiceImpl implements PermissionService {
                     if (parent.getType() != 1) {
                         throw new BusinessException(BaseResponseCode.OPERATION_MENU_PERMISSION_CATALOG_ERROR);
                     }
-                } else if (!sysPermission.getPid().equals("0")) {
+                } else if (!"0".equals(sysPermission.getPid())) {
                     throw new BusinessException(BaseResponseCode.OPERATION_MENU_PERMISSION_CATALOG_ERROR);
                 }
                 break;
@@ -229,6 +220,8 @@ public class PermissionServiceImpl implements PermissionService {
                 if (StringUtils.isEmpty(sysPermission.getCode())) {
                     throw new BusinessException(BaseResponseCode.OPERATION_MENU_PERMISSION_URL_CODE_NULL);
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -295,16 +288,20 @@ public class PermissionServiceImpl implements PermissionService {
         markUser(permissionId);
     }
 
-    //标记传入权限所关联的用户，让其去主动刷新 token
+    /**
+     * 标记传入权限所关联的用户，让其去主动刷新 token
+     *
+     * @param permissionId 传入权限 ID
+     */
     private void markUser(String permissionId) {
         List<String> roleIds = rolePermissionService.getRoleIdsByPermissionId(permissionId);
         if (!roleIds.isEmpty()) {
             List<String> userIds = userRoleService.getUserIdsByRoleIds(roleIds);
             if (!userIds.isEmpty()) {
                 userIds.forEach(uid -> {
-                    redisService.set(Constant.JWT_REFRESH_KEY+ uid, uid,
-                        tokenSettings.getAccessTokenExpireTime().toMillis(),
-                        TimeUnit.MILLISECONDS);
+                    redisService.set(Constant.JWT_REFRESH_KEY + uid, uid,
+                            tokenSettings.getAccessTokenExpireTime().toMillis(),
+                            TimeUnit.MILLISECONDS);
                     //删除用户缓存的授权信息
                     redisService.delete(Constant.IDENTIFY_CACHE_KEY + uid);
                 });
@@ -315,7 +312,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<String> getPermissionByUserId(String userId) {
         List<SysPermission> permissions = getPermissionsById(userId);
-        if (permissions==null||permissions.isEmpty()) {
+        if (permissions == null || permissions.isEmpty()) {
             return null;
         }
         return permissions.stream().map(p -> {

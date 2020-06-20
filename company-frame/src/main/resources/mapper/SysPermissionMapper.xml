@@ -186,12 +186,35 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-  <!-- @Description:    查询所有的菜单权限数据-->
+  <!-- @Description:    分页查询所有的菜单权限数据-->
   <!-- @Author:    Saber污妖王-->
   <select id="selectAll" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from sys_permission
-    where deleted=1 order by order_num desc
+    where deleted=1
+    order by order_num desc
+  </select>
+  <!-- @Description:    分页查询所有的菜单权限数据-->
+  <!-- @Author:    Saber污妖王-->
+  <select id="pageInfo" resultMap="BaseResultMap" parameterType="com.yingxue.lesson.vo.req.PermissionPageReqVO">
+    select <include refid="Base_Column_List"/>
+    from sys_permission
+    <where>
+      deleted=1
+      <if test="name != null and name != ''">
+        and `name` like concat('%', #{name}, '%')
+      </if>
+      <if test="method != null and method != ''">
+        and method = #{method}
+      </if>
+      <if test="type != null and type != ''">
+        and type = #{type}
+      </if>
+      <if test="status != null and status != '' or status == 0">
+        and `status` = #{status}
+      </if>
+    </where>
+    order by order_num desc
   </select>
   <!-- @Description:    查询该权限的子集-->
   <!-- @Author:    Saber污妖王-->

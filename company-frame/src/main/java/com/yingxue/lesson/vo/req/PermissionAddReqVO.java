@@ -8,13 +8,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 菜单权限添加请求的数据封装类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/4/11
- * @Package: com.yingxue.lesson.vo.resp
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor saber污妖王
+ * @project company-frame
+ * @date 2020/4/11
+ * @package com.yingxue.lesson.vo.resp
  */
 @Data
 @ApiModel(description = "接收前端添加菜单权限请求提交的数据")

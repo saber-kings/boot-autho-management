@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 自定义 Realm 域
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/26
- * @Package: com.yingxue.lesson.shiro
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/26
+ * @package com.yingxue.lesson.shiro
  */
 @Slf4j
 public class CustomRealm extends AuthorizingRealm {
@@ -49,10 +49,10 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String accessToken = (String) principals.getPrimaryPrincipal();
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Claims claims = JwtTokenUtil.getClaimsFromToken(accessToken);
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         String userId = JwtTokenUtil.getUserId(accessToken);
-        log.info("userId={}", userId);
+        log.info("校验权限，userId={}", userId);
         if (redisService.hasKey(Constant.JWT_REFRESH_KEY + userId) &&
                 redisService.getExpire(Constant.JWT_REFRESH_KEY + userId, TimeUnit.MILLISECONDS)
                         > JwtTokenUtil.getRemainingTime(accessToken)) {

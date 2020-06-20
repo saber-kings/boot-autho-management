@@ -5,13 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @Author: Saber污妖王
- * TODO: 响应客户端登陆请求的数据封装类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/25
- * @Package: com.yingxue.lesson.vo.resp
- * @Version: 0.0.1
+ * @author Saber污妖王
+ * TODO 响应客户端登陆请求的数据封装类
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/25
+ * @package com.yingxue.lesson.vo.resp
  */
 @Data
 @ApiModel(description = "返回登陆请求结果的相关数据")

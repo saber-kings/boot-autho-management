@@ -3,6 +3,11 @@ package com.yingxue.lesson.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 数据字典数据库操作参数实体
+ *
+ * @author Saber污妖王
+ */
 public class SysDataExample {
     protected String orderByClause;
 
@@ -53,8 +58,7 @@ public class SysDataExample {
     }
 
     protected Criteria createCriteriaInternal() {
-        Criteria criteria = new Criteria();
-        return criteria;
+        return new Criteria();
     }
 
     public void clear() {

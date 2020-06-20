@@ -8,13 +8,13 @@ import org.apache.shiro.cache.CacheManager;
 import javax.annotation.Resource;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: Shiro 的 Redis 缓存管理器
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/3/26
- * @Package: com.yingxue.lesson.shiro
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/3/26
+ * @package com.yingxue.lesson.shiro
  */
 public class RedisCacheManager implements CacheManager {
     @Resource

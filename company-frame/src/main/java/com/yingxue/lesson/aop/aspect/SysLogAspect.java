@@ -6,7 +6,7 @@ import com.yingxue.lesson.constants.Constant;
 import com.yingxue.lesson.entity.SysLog;
 import com.yingxue.lesson.mapper.SysLogMapper;
 import com.yingxue.lesson.utils.HttpContextUtils;
-import com.yingxue.lesson.utils.IPUtils;
+import com.yingxue.lesson.utils.IpUtils;
 import com.yingxue.lesson.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -114,7 +114,7 @@ public class SysLogAspect {
         //获取request
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         //设置IP地址
-        sysLog.setIp(IPUtils.getIpAddr(request));
+        sysLog.setIp(IpUtils.getIpAddr(request));
         log.info("Ip{}，接口地址{}，请求方式{}，入参：{}", sysLog.getIp(), request.getRequestURL(), request.getMethod(), sysLog.getParams());
         //用户名
         String token = request.getHeader(Constant.ACCESS_TOKEN);

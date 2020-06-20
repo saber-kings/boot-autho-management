@@ -17,13 +17,13 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 角色模块相关接口
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/4/19
- * @Package: com.yingxue.lesson.controller
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/4/19
+ * @package com.yingxue.lesson.controller
  */
 @RestController
 @RequestMapping("/api")

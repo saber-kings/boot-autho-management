@@ -20,13 +20,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * @Author: Saber污妖王
- * TODO: 类文件简单描述
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/5/5
- * @Package: com.yingxue.lesson.controller
- * @Version: 0.0.1
+ * @author Saber污妖王
+ * TODO: 数据词典模块相关接口
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/5/5
+ * @package com.yingxue.lesson.controller
  */
 @Slf4j
 @RestController
@@ -63,11 +63,12 @@ public class DataController {
         dataService.updateData(vo);
         return DataResult.success();
     }
+
     @DeleteMapping("/data")
     @ApiOperation(value = "批量/删除字典接口")
 //    @RequiresPermissions("sys:data:delete")
     @MyLog(title = "组织模块-字典管理", action = "批量/删除字典接口")
-    public DataResult<Object> deletedDatas(@RequestBody @ApiParam("字典id集合") List<String> list){
+    public DataResult<Object> deletedDatas(@RequestBody @ApiParam("字典id集合") List<String> list) {
         dataService.batchDeletedData(list);
         return DataResult.success();
     }

@@ -9,12 +9,12 @@ import com.yingxue.lesson.mapper.SysDeptMapper;
 import com.yingxue.lesson.service.DeptService;
 import com.yingxue.lesson.service.RedisService;
 import com.yingxue.lesson.service.UserService;
+import com.yingxue.lesson.utils.BeanUtils;
 import com.yingxue.lesson.utils.CodeUtil;
 import com.yingxue.lesson.vo.req.DeptAddReqVO;
 import com.yingxue.lesson.vo.req.DeptUpdateReqVO;
 import com.yingxue.lesson.vo.resp.DeptRespNodeVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -24,13 +24,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Author: Saber污妖王
+ * @author Saber污妖王
  * TODO: 部门业务层实现类
- * @UpdateUser: luanz
- * @Project: company-frame
- * @Date: 2020/4/21
- * @Package: com.yingxue.lesson.service.impl
- * @Version: 0.0.1
+ * @version 0.0.1
+ * @editor Saber污妖王
+ * @project company-frame
+ * @date 2020/4/21
+ * @package com.yingxue.lesson.service.impl
  */
 @Service
 @Slf4j
@@ -52,6 +52,9 @@ public class DeptServiceImpl implements DeptService {
             if (parent != null) {
                 s.setPidName(parent.getName());
             }
+            if (Constant.DEPT_TOP.equals(s.getPid())) {
+                s.setPidName("默认顶级部门");
+            }
         });
         return list;
     }
@@ -69,7 +72,7 @@ public class DeptServiceImpl implements DeptService {
             }
         }
         DeptRespNodeVO respNodeVO = new DeptRespNodeVO();
-        respNodeVO.setId("0");
+        respNodeVO.setId(Constant.DEPT_TOP);
         respNodeVO.setTitle("默认顶级部门");
         respNodeVO.setChildren(getTree(list));
         List<DeptRespNodeVO> result = new ArrayList<>();
@@ -79,7 +82,7 @@ public class DeptServiceImpl implements DeptService {
 
     private List<DeptRespNodeVO> getTree(List<SysDept> all) {
         return all.stream().map(s -> {
-            if (s.getPid().equals("0")) {
+            if (Constant.DEPT_TOP.equals(s.getPid())) {
                 DeptRespNodeVO respNodeVO = new DeptRespNodeVO();
                 respNodeVO.setId(s.getId());
                 respNodeVO.setTitle(s.getName());
@@ -109,7 +112,7 @@ public class DeptServiceImpl implements DeptService {
         long deptCount = redisService.incrby(Constant.DEPT_CODE_KEY, 1);
         String deptCode = CodeUtil.deptCode(String.valueOf(deptCount), 7, "0");
         SysDept parent = sysDeptMapper.selectByPrimaryKey(vo.getPid());
-        if (vo.getPid().equals("0")) {
+        if (Constant.DEPT_TOP.equals(vo.getPid())) {
             relationCode = deptCode;
         } else if (parent == null) {
             log.info("父级数据不存在{}", vo.getPid());
@@ -150,7 +153,7 @@ public class DeptServiceImpl implements DeptService {
         if (!vo.getPid().equals(sysDept.getPid())) {
             //子集的部门层级关系编码=父级部门编码+它本身的部门编码
             SysDept newParent = sysDeptMapper.selectByPrimaryKey(vo.getPid());
-            if (!vo.getPid().equals("0") && newParent == null) {
+            if (!Constant.DEPT_TOP.equals(vo.getPid()) && newParent == null) {
                 log.info("修改后的上级部门在数据库中不存在：{}", vo.getPid());
                 throw new BusinessException(BaseResponseCode.DATA_ERROR);
             }
@@ -158,10 +161,10 @@ public class DeptServiceImpl implements DeptService {
             String oldRelation;
             String newRelation;
             //根目录挂靠到其他目录
-            if (sysDept.getPid().equals("0")) {
+            if (Constant.DEPT_TOP.equals(sysDept.getPid())) {
                 oldRelation = sysDept.getRelationCode();
                 newRelation = newParent.getRelationCode() + sysDept.getDeptNo();
-            } else if (vo.getPid().equals("0")) {
+            } else if (Constant.DEPT_TOP.equals(vo.getPid())) {
                 //其他目录升到根目录
                 oldRelation = sysDept.getRelationCode();
                 newRelation = sysDept.getDeptNo();
